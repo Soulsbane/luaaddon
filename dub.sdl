@@ -1,0 +1,10 @@
+name "luaaddon"
+description "Various functions/classes for creating a Lua Addon system in your program."
+authors "Paul Crane"
+copyright "Copyright © 2016, Paul Crane"
+license "proprietary"
+dependency "luad" version="~master"
+targetType "library"
+configuration "library" {
+	targetType "library"
+}
