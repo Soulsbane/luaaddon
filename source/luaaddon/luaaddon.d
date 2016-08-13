@@ -29,6 +29,17 @@ class LuaAddon
 		return false;
 	}
 
+	auto getFunctionReturnValue(T...)(const string name, T args)
+	{
+		auto value = state_.get!LuaFunction(name)(args);
+		return value[0];
+	}
+
+	auto getFunctionReturnValues(T...)(const string name, T args)
+	{
+		return state_.get!LuaFunction(name)(args);
+	}
+
 	bool hasFunction(const string name)
 	{
 		return state_[name].isNil ? false : true;
