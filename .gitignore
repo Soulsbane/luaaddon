@@ -5,3 +5,4 @@ __dummy.html
 *.obj
 
 libluaaddon.a
+__test__library__
