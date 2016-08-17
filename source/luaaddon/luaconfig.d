@@ -32,12 +32,18 @@ class LuaConfig : LuaAddon
 
 		Params:
 			name = The name of the variable to return.
+			defaultValue = The value to return if config variable isn't found.
 
 		Returns:
 			The value of variableName
 	*/
-	T getValue(T = string)(const string variableName)
+	T getValue(T = string)(const string variableName, T defaultValue = T.init)
 	{
+		if(state_[variableName].isNil)
+		{
+			return defaultValue;
+		}
+
 		return state_.get!T(variableName);
 	}
 
@@ -47,13 +53,42 @@ class LuaConfig : LuaAddon
 		Params:
 			table = The name of the table the variable resides in. Only supports a top level table.
 			name = The name of the variable to return.
+			defaultValue = The value to return if config variable isn't found.
 
 		Returns:
 			The value of tableName.variableName
 	*/
-	T getValue(T = string)(const string table, const string variableName)
+	T getTableValue(T = string)(const string table, const string variableName, T defaultValue = T.init)
 	{
+		if(state_[table, variableName].isNil)
+		{
+			return defaultValue;
+		}
+
 		return state_.get!T(table, variableName);
+	}
+
+	/**
+		Returns a variables value from a config file using its table name and variable name.
+		This function allows the retrieval of a value through multiple layers of a table.
+		NOTE: Unlike the other get methods this is method requires the defaultValue as the first parameter due to a
+		limitation in D's templates.
+
+		Params:
+			defaultValue = The default value to use if the variable isn't found.
+			args = The name of the table(s) the variable resides in.
+
+		Returns:
+			The value of firstTable.secondTable.variableName.
+	*/
+	T getTableValueEx(T = string, S...)(T defaultValue, S args)
+	{
+		if(state_[args].isNil)
+		{
+			return defaultValue;
+		}
+
+		return state_.get!T(args);
 	}
 
 	/**
