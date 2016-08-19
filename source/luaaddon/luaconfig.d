@@ -131,3 +131,70 @@ class LuaConfig : LuaAddon
 		return false;
 	}
 }
+
+///
+unittest
+{
+	import std.stdio : writeln;
+
+	enum configString =
+	q{
+		TodoTaskPatterns = {
+			["(?P<tag>[A-Z]+):(?P<message>.*)"] = false,
+			["\\W+(?P<tag>[a-zA-Z]+):\\s+(?P<message>.*)"] = false,
+			["\\W+(?P<tag>INFO|NOTE|FIXME|TODO):\\s+(?P<message>.*)"] = false,
+			["[;'#-*@/]*\\s*(?P<tag>INFO|NOTE|FIXME|TODO|XXX):?\\s*(?P<message>.*)"] = true,
+		}
+
+		AppConfigVars = {
+			DeleteAllTodoFilesAtStart = true,
+			DefaultTodoFileName = "todo",
+		}
+
+		MultiLevel = {
+			SecondLevel = {
+				secondLevelValue = "Second level"
+			}
+		}
+
+		Exist = "I exist"
+	};
+
+	LuaConfig config = new LuaConfig;
+	config.loadString(configString);
+
+	auto patterns = config.getTable("TodoTaskPatterns");
+	auto configVars = config.getTable("AppConfigVars");
+
+	foreach(string key, bool value; patterns)
+	{
+		writeln("Key => ", key, " Value => ", value);
+	}
+
+	assert(config.getTableValue!bool("AppConfigVars", "DeleteAllTodoFilesAtStart"));
+	assert(config.getTableValue!bool("AppConfigVars", "NoValue", true));
+
+	assert(config.getTableValueEx("The default Value", "NonExist") == "The default Value");
+	assert(config.getTableValueEx("Won't print!", "Exist") == "I exist");
+	assert(config.getTableValueEx("Default value", "MultiLevel", "SecondLevel", "secondLevelValue") == "Second level");
+	assert(config.getTableValueEx("Default value", "MultiLevel", "SecondLevel", "noSecondLevelValue") == "Default value");
+
+	assert(config.getValue("NonExist", "The default Value") == "The default Value");
+	assert(config.getValue("Exist", "The default Value") == "I exist");
+
+	foreach(string key, LuaObject value; configVars)
+	{
+		if(value.type == LuaType.Boolean)
+		{
+			writeln("Its a boolean");
+		}
+
+		writeln("Key => ", key, " Value => ", value.toString);
+	}
+
+	enum emptyString = "";
+
+	LuaConfig emptyConfig = new LuaConfig;
+	bool loaded = emptyConfig.loadString(emptyString);
+	assert(loaded == false);
+}
