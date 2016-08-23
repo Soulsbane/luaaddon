@@ -72,6 +72,11 @@ struct TocParser
 		return defaultValue;
 	}
 
+	string[] getFilesList()
+	{
+		return filesList_;
+	}
+
 	void dump()
 	{
 		writeln("=====================Key Value Fields=======================");
