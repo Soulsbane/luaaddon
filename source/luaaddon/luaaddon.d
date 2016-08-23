@@ -5,6 +5,7 @@ module luaaddon.luaaddon;
 
 import std.algorithm : each;
 import std.path : buildNormalizedPath;
+import std.string : chop;
 
 public import luad.all;
 
@@ -148,8 +149,7 @@ class LuaAddon
 		string packagePaths;
 
 		paths.each!(path => packagePaths ~= buildNormalizedPath(path, "?.lua") ~ ";");
-		packagePaths = packagePaths[0..$ - 1];
-		state_["package", "path"] = packagePaths;
+		state_["package", "path"] = packagePaths.chop; // Remove trailing semicolon.
 	}
 
 	auto opDispatch(string funcName, T...)(T args)
