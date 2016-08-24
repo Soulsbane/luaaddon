@@ -37,7 +37,10 @@ struct TocParser
 			}
 			else // Line is a file name
 			{
-				filesList_ ~= line;
+				if(line.length != line.countchars(" ")) // Make sure line isn't only whitespace
+				{
+					filesList_ ~= line;
+				}
 			}
 		}
 	}
