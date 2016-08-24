@@ -2,17 +2,18 @@ module luaaddon.tocparser;
 
 import std.stdio;
 import std.file;
-import std.path;
-import std.array;
 import std.string;
-import std.regex;
+import std.regex : matchFirst, ctRegex;
 import std.algorithm;
+
+enum _TocLinePattern = r"##\s+(?P<key>.*):\s+(?P<value>.*)";
 
 struct TocParser
 {
 	void processText(const string text)
 	{
 		auto lines = text.lineSplitter();
+		auto linePattern = ctRegex!(_TocLinePattern);
 
 		foreach(line; lines)
 		{
@@ -24,7 +25,7 @@ struct TocParser
 			}
 			else if(line.startsWith("#"))
 			{
-				auto re = matchFirst(line, linePattern_);
+				auto re = matchFirst(line, linePattern);
 
 				if(!re.empty)
 				{
@@ -92,5 +93,4 @@ struct TocParser
 private:
 	string[] filesList_;
 	string[string] fields_;
-	Regex!char linePattern_ = regex(r"##\s+(?P<key>.*):\s+(?P<value>.*)");
 }
