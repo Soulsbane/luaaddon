@@ -45,6 +45,17 @@ struct TocParser
 		}
 	}
 
+	bool loadString(const string text)
+	{
+		if(text.length)
+		{
+			processText(text);
+			return true;
+		}
+
+		return false;
+	}
+
 	bool loadFile(const string fileName)
 	{
 		if(fileName.exists)
