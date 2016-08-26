@@ -220,5 +220,5 @@ private:
 
 protected:
 	LuaState state_;
-	//alias state_ this;
+	alias lua_ = state_;
 }
