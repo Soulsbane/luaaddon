@@ -90,46 +90,6 @@ class LuaConfig : LuaAddon
 
 		return state_.get!T(args);
 	}
-
-	/**
-		Loads a config file using doFile.
-
-		Params:
-			name = The config file to load.
-
-		Returns:
-			True if the file exists false otherwise.
-	*/
-	bool loadFile(const string name)
-	{
-		if(name.exists)
-		{
-			super.doFile(name);
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-		Loads a string using doString.
-
-		Params:
-			data = The string to load.
-
-		Returns:
-			True if the string isn't empty false otherwise.
-	*/
-	bool loadString(const string data)
-	{
-		if(data.length)
-		{
-			super.doString(data);
-			return true;
-		}
-
-		return false;
-	}
 }
 
 ///

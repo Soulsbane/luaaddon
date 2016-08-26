@@ -5,6 +5,7 @@ module luaaddon.luaaddon;
 
 import std.algorithm : each;
 import std.path : buildNormalizedPath;
+import std.file : exists;
 import std.string : chop;
 
 public import luad.all;
@@ -152,6 +153,57 @@ class LuaAddon
 		state_["package", "path"] = packagePaths.chop; // Remove trailing semicolon.
 	}
 
+	/**
+		Loads a config file using doFile.
+
+		Params:
+			name = The config file to load.
+
+		Returns:
+			True if the file exists false otherwise.
+	*/
+	bool loadFile(const string name)
+	{
+		if(name.exists)
+		{
+			state_.doFile(name);
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+		Loads a Lua file(s) using doFile.
+
+		Params:
+			paths = A list of files to load.
+	*/
+	void loadFiles(const string[] paths...)
+	{
+		paths.each!(path => loadFile(path));
+	}
+
+	/**
+		Loads a string using doString.
+
+		Params:
+			data = The string to load.
+
+		Returns:
+			True if the string isn't empty false otherwise.
+	*/
+	bool loadString(const string data)
+	{
+		if(data.length)
+		{
+			state_.doString(data);
+			return true;
+		}
+
+		return false;
+	}
+
 	auto opDispatch(string funcName, T...)(T args)
 	{
 		return mixin("state_." ~ funcName ~ "(args)");
@@ -168,5 +220,5 @@ private:
 
 protected:
 	LuaState state_;
-	alias state_ this;
+	//alias state_ this;
 }
