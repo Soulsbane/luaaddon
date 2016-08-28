@@ -7,20 +7,26 @@ import std.algorithm : each;
 import std.path : buildNormalizedPath;
 import std.file : exists;
 import std.string : chop;
+import std.stdio : writeln;
 
 public import luad.all;
+import luad.c.all;
 
-///The main class for creating a Lua addon.
+///Main type for creating a Lua addon.
 class LuaAddon
 {
 	this()
 	{
-		setupEnvironment();
+		// FIXME: Workaround for a LuaD bug  where LuaState is used but was already destroyed. See LuaD issue# 11.
+		auto L = luaL_newstate();
+
+		state_ = new LuaState(L);
+		state_.openLibs();
+		state_.setPanicHandler(&panic);
 	}
 
 	static void panic(LuaState lua, in char[] error)
 	{
-		import std.stdio : writeln;
 		writeln("Error in addon code!\n", error, "\n");
 	}
 
@@ -209,16 +215,5 @@ class LuaAddon
 		return mixin("state_." ~ funcName ~ "(args)");
 	}
 
-private:
-	void setupEnvironment()
-	{
-		state_ = new LuaState;
-
-		state_.openLibs();
-		state_.setPanicHandler(&panic);
-	}
-
-protected:
-	LuaState state_;
-	alias lua_ = state_;
+	protected LuaState state_;
 }
