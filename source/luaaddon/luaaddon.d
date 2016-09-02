@@ -31,25 +31,6 @@ class LuaAddon
 	}
 
 	/**
-		Calls Lua function with no return value. Useful for an OnInitialize function that should be called at program start and
-		has no return value.
-
-		Params:
-			name = The name of the function to call.
-			args = The arguments to the function to call.
-	*/
-	bool callFunction(T...)(const string name, T args)
-	{
-		if(hasFunction(name))
-		{
-			state_.get!LuaFunction(name)(args);
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 		Calls a Lua function and returns its value. This should only be used with Lua functions that return only a
 		single value.
 
@@ -58,7 +39,7 @@ class LuaAddon
 			args = The arguments to the function to call.
 
 		Returns:
-			The value from the Lua function that was called.
+			The value(LuaObject) from the Lua function that was called.
 	*/
 	auto getFunctionReturnValue(T...)(const string name, T args)
 	{
@@ -78,6 +59,37 @@ class LuaAddon
 	auto getFunctionReturnValues(T...)(const string name, T args)
 	{
 		return state_.get!LuaFunction(name)(args);
+	}
+
+	/**
+		Calls Lua function with no return value. Useful for an OnInitialize function that should be called at program start and
+		has no return value.
+
+		Params:
+			T = The type to convert the returned value to.
+			name = The name of the function to call.
+			args = The arguments to the function to call.
+	*/
+	T callFunction(T = void, S...)(const string name, S args)
+	{
+		static if(is(T == LuaObject))
+		{
+			auto value = state_.get!LuaFunction(name)(args);
+			return value[0];
+		}
+		else static if(is(T == LuaObject[]))
+		{
+			return state_.get!LuaFunction(name)(args);
+		}
+		else static if(is(T == void))
+		{
+			state_.get!LuaFunction(name)(args);
+		}
+		else
+		{
+			auto value = state_.get!LuaFunction(name)(args);
+			return value[0].to!T;
+		}
 	}
 
 	/**
