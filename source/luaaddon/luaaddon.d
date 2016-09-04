@@ -72,23 +72,24 @@ class LuaAddon
 	*/
 	T callFunction(T = void, S...)(const string name, S args)
 	{
-		static if(is(T == LuaObject))
+		if(hasFunction(name))
 		{
-			auto value = state_.get!LuaFunction(name)(args);
-			return value[0];
-		}
-		else static if(is(T == LuaObject[]))
-		{
-			return state_.get!LuaFunction(name)(args);
-		}
-		else static if(is(T == void))
-		{
-			state_.get!LuaFunction(name)(args);
+			static if(is(T == void))
+			{
+				state_.get!LuaFunction(name)(args);
+			}
+			else
+			{
+				auto value = state_.get!LuaFunction(name)(args);
+				return value[0].to!T;
+			}
 		}
 		else
 		{
-			auto value = state_.get!LuaFunction(name)(args);
-			return value[0].to!T;
+			static if(!is(T == void))
+			{
+				return T.init;
+			}
 		}
 	}
 
