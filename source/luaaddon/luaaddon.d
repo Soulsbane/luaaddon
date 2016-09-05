@@ -41,10 +41,17 @@ class LuaAddon
 		Returns:
 			The value(LuaObject) from the Lua function that was called.
 	*/
-	auto getFunctionReturnValue(T...)(const string name, T args)
+	T getFunctionReturnValue(T = LuaObject, S...)(const string name, S args)
 	{
 		auto value = state_.get!LuaFunction(name)(args);
-		return value[0];
+		static if(is(T == LuaObject))
+		{
+			return value[0];
+		}
+		else
+		{
+			return value[0].to!T;
+		}
 	}
 
 	/**
