@@ -5,6 +5,7 @@ import std.file;
 import std.string;
 import std.regex : matchFirst, ctRegex;
 import std.algorithm;
+import std.conv : to;
 
 enum _TocLinePattern = r"##\s+(?P<key>.*):\s+(?P<value>.*)";
 
@@ -77,11 +78,11 @@ struct TocParser
 		return false;
 	}
 
-	string getValue(const string name, string defaultValue = string.init)
+	T getValue(T = string)(const string name, T defaultValue = T.init)
 	{
 		if(hasField(name))
 		{
-			return fields_[name];
+			return fields_[name].to!T;
 		}
 
 		return defaultValue;
