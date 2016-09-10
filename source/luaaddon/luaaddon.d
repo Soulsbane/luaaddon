@@ -69,8 +69,7 @@ class LuaAddon
 	}
 
 	/**
-		Calls Lua function with no return value. Useful for an OnInitialize function that should be called at program start and
-		has no return value.
+		Calls a Lua function and returns it's value as type T. If T = void no value will be returned(default).
 
 		Params:
 			T = The type to convert the returned value to.
