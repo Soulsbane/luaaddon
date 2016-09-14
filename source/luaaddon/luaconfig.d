@@ -21,67 +21,13 @@ class LuaConfig : LuaAddon
 		Returns:
 			The table.
 	*/
-	LuaTable getTable(const string name) @trusted
+	LuaTable getTable(const string name)
 	{
 		LuaTable variable = state_.get!LuaTable(name);
 		return variable;
 	}
 
-	/**
-		Returns a variables value from a config file.
-
-		Params:
-			name = The name of the variable to return.
-			defaultValue = The value to return if config variable isn't found.
-
-		Returns:
-			The value of variableName
-	*/
-	T getValue(T = string)(const string variableName, T defaultValue = T.init)
-	{
-		if(state_[variableName].isNil)
-		{
-			return defaultValue;
-		}
-
-		return state_.get!T(variableName);
-	}
-
-	/**
-		Returns a variables value from a config file using its table name and variable name.
-
-		Params:
-			table = The name of the table the variable resides in. Only supports a top level table.
-			name = The name of the variable to return.
-			defaultValue = The value to return if config variable isn't found.
-
-		Returns:
-			The value of tableName.variableName
-	*/
-	T getTableValue(T = string)(const string table, const string variableName, T defaultValue = T.init)
-	{
-		if(state_[table, variableName].isNil)
-		{
-			return defaultValue;
-		}
-
-		return state_.get!T(table, variableName);
-	}
-
-	/**
-		Returns a variables value from a config file using its table name and variable name.
-		This function allows the retrieval of a value through multiple layers of a table.
-		NOTE: Unlike the other get methods this is method requires the defaultValue as the first parameter due to a
-		limitation in D's templates.
-
-		Params:
-			defaultValue = The default value to use if the variable isn't found.
-			args = The name of the table(s) the variable resides in.
-
-		Returns:
-			The value of firstTable.secondTable.variableName.
-	*/
-	T getTableValueEx(T = string, S...)(T defaultValue, S args)
+	T get(T = string, S...)(S args, T defaultValue)
 	{
 		if(state_[args].isNil)
 		{
@@ -90,6 +36,27 @@ class LuaConfig : LuaAddon
 
 		return state_.get!T(args);
 	}
+
+	void set(T...)(T args)
+	{
+		static if(args.length >= 2) //TODO: Figure out what to do if < 2 args are passed.
+		{
+			state_[args[0..$ - 1]] = args[$ - 1];
+		}
+	}
+
+	LuaTable config_;
+}
+
+struct LuaConfig2
+{
+	this(const string fileName, const string tableName = "Config")
+	{
+		state_ = new LuaState;
+
+	}
+
+	LuaState state_;
 }
 
 ///
@@ -131,16 +98,18 @@ unittest
 		writeln("Key => ", key, " Value => ", value);
 	}
 
-	assert(config.getTableValue!bool("AppConfigVars", "DeleteAllTodoFilesAtStart"));
-	assert(config.getTableValue!bool("AppConfigVars", "NoValue", true));
+	assert(config.get!bool("AppConfigVars", "NoValue", true)); // A default value must always be passed.
 
-	assert(config.getTableValueEx("The default Value", "NonExist") == "The default Value");
-	assert(config.getTableValueEx("Won't print!", "Exist") == "I exist");
-	assert(config.getTableValueEx("Default value", "MultiLevel", "SecondLevel", "secondLevelValue") == "Second level");
-	assert(config.getTableValueEx("Default value", "MultiLevel", "SecondLevel", "noSecondLevelValue") == "Default value");
+	assert(config.get("Exist", "Won't print!") == "I exist");
+	assert(config.get("MultiLevel", "SecondLevel", "secondLevelValue", "Default value") == "Second level");
+	assert(config.get("MultiLevel", "SecondLevel", "noSecondLevelValue", "Default value") == "Default value");
+	config.set("MultiLevel", "SecondLevel", "secondLevelValue", "Changed value");
+	assert(config.get("MultiLevel", "SecondLevel", "secondLevelValue", "Default value") == "Changed value");
 
-	assert(config.getValue("NonExist", "The default Value") == "The default Value");
-	assert(config.getValue("Exist", "The default Value") == "I exist");
+	assert(config.get("NonExist", "The default Value") == "The default Value");
+	assert(config.get("Exist", "The default Value") == "I exist");
+	config.set("Exist", "No I'm not so sure.");
+	assert(config.get("Exist", "The default Value") == "No I'm not so sure.");
 
 	foreach(string key, LuaObject value; configVars)
 	{
