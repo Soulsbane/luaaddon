@@ -3,14 +3,13 @@
 */
 module luaaddon.luaconfig;
 
-import std.file : exists;
-import luaaddon.luaaddon;
+import luaaddon.base;
 
 /**
 	Allows the usage of Lua as a configuration file format.
 	Note: This only loads Lua files and does not support saving at this time.
 */
-class LuaConfig : LuaAddon
+class LuaConfig : LuaAddonBase
 {
 	/**
 		Returns a table from a config file.
@@ -27,6 +26,13 @@ class LuaConfig : LuaAddon
 		return variable;
 	}
 
+	/**
+		Returns a value of type T from a config file(variable, table).
+
+		Params:
+			args = A list of tables or variables that should be returned.
+			defaultValue = The default value if the table or variable can't be found.
+	*/
 	T get(T = string, S...)(S args, T defaultValue)
 	{
 		if(state_[args].isNil)
@@ -37,6 +43,12 @@ class LuaConfig : LuaAddon
 		return state_.get!T(args);
 	}
 
+	/**
+		Sets a value variable or table value.
+
+		Params:
+			args = A list of tables or variables that that will be set.
+	*/
 	void set(T...)(T args)
 	{
 		static if(args.length >= 2) //TODO: Figure out what to do if < 2 args are passed.
@@ -45,18 +57,7 @@ class LuaConfig : LuaAddon
 		}
 	}
 
-	LuaTable config_;
-}
-
-struct LuaConfig2
-{
-	this(const string fileName, const string tableName = "Config")
-	{
-		state_ = new LuaState;
-
-	}
-
-	LuaState state_;
+	private LuaTable config_;
 }
 
 ///
@@ -88,6 +89,7 @@ unittest
 	};
 
 	LuaConfig config = new LuaConfig;
+
 	config.loadString(configString);
 
 	auto patterns = config.getTable("TodoTaskPatterns");

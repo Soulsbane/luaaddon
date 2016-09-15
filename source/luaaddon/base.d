@@ -1,0 +1,74 @@
+/**
+	Provides a base class for LuaAddon and LuaConfig.
+*/
+module luaaddon.base;
+
+import std.algorithm : each;
+import std.file : exists;
+import std.stdio : writeln;
+
+public import luad.all;
+import luad.c.all;
+
+class LuaAddonBase
+{
+	this()
+	{
+		// FIXME: Workaround for a LuaD bug  where LuaState is used but was already destroyed. See LuaD issue# 11.
+		auto L = luaL_newstate();
+		state_ = new LuaState(L);
+	}
+
+	/**
+		Loads a config file using doFile.
+
+		Params:
+			name = The config file to load.
+
+		Returns:
+			True if the file exists false otherwise.
+	*/
+	bool loadFile(const string name)
+	{
+		if(name.exists)
+		{
+			state_.doFile(name);
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+		Loads a Lua file(s) using doFile.
+
+		Params:
+			paths = A list of files to load.
+	*/
+	void loadFiles(const string[] paths...)
+	{
+		paths.each!(path => loadFile(path));
+	}
+
+	/**
+		Loads a string using doString.
+
+		Params:
+			data = The string to load.
+
+		Returns:
+			True if the string isn't empty false otherwise.
+	*/
+	bool loadString(const string data)
+	{
+		if(data.length)
+		{
+			state_.doString(data);
+			return true;
+		}
+
+		return false;
+	}
+
+	protected LuaState state_;
+}
