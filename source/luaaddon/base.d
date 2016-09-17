@@ -10,6 +10,9 @@ import std.stdio : writeln;
 public import luad.all;
 import luad.c.all;
 
+/**
+	Provides a base class for LuaAddon and LuaConfig.
+*/
 class LuaAddonBase
 {
 	this()
