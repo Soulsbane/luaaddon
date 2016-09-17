@@ -49,12 +49,9 @@ class LuaConfig : LuaAddonBase
 		Params:
 			args = A list of tables or variables that that will be set.
 	*/
-	void set(T...)(T args)
+	void set(T, S...)(S args, T value)
 	{
-		static if(args.length >= 2) //TODO: Figure out what to do if < 2 args are passed.
-		{
-			state_[args[0..$ - 1]] = args[$ - 1];
-		}
+		state_[args] = value;
 	}
 
 	private LuaTable config_;
@@ -112,6 +109,10 @@ unittest
 	assert(config.get("Exist", "The default Value") == "I exist");
 	config.set("Exist", "No I'm not so sure.");
 	assert(config.get("Exist", "The default Value") == "No I'm not so sure.");
+
+	assert(config.get("AppConfigVars", "DeleteAllTodoFilesAtStart", false) == true);
+	config.set("AppConfigVars", "DeleteAllTodoFilesAtStart", false);
+	assert(config.get("AppConfigVars", "DeleteAllTodoFilesAtStart", false) == false);
 
 	foreach(string key, LuaObject value; configVars)
 	{
