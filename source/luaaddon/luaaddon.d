@@ -108,9 +108,6 @@ class LuaAddon : LuaAddonBase
 		return state_[name].isNil ? false : true;
 	}
 
-	/// Just makes function calls clearer.
-	alias hasTable = hasFunction;
-
 	/**
 		Creates a new table.
 

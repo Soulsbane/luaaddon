@@ -73,5 +73,19 @@ class LuaAddonBase
 		return false;
 	}
 
+	/**
+		Checks for the existence of a Lua table.
+
+		Params:
+			name = Name of the table to find.
+
+		Retruns:
+			True if the table was found false otherwise.
+	*/
+	bool hasTable(const string name)
+	{
+		return state_[name].isNil ? false : true;
+	}
+
 	protected LuaState state_;
 }
