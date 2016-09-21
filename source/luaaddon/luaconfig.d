@@ -12,6 +12,37 @@ import luaaddon.base;
 class LuaConfig : LuaAddonBase
 {
 	/**
+		Loads a Lua config file.
+
+		Params:
+			fileName = Name of the file to load.
+			tableName = The name of the table where config values are found. Only single layer tables are supported.
+
+		Returns:
+			True if the file was found and false otherwise.
+	*/
+	bool loadFile(const string fileName, const string tableName = "Config")
+	{
+		fileName_ = fileName;
+		configTableName_ = tableName;
+
+		return doFile(fileName);
+	}
+
+	/**
+		Loads a string containing the Lua table to use.
+
+		Params:
+			text = The text that contains the Lua table to use.
+	 		tableName = The name of the table where config values are found. Only single layer tables are supported.
+	*/
+	void loadString(const string text, const string tableName = "Config")
+	{
+		configTableName_ = tableName;
+		doString(text);
+	}
+
+	/**
 		Returns a table from a config file.
 
 		Params:
@@ -24,6 +55,11 @@ class LuaConfig : LuaAddonBase
 	{
 		LuaTable variable = state_.get!LuaTable(name);
 		return variable;
+	}
+
+	T as(T = string)(const string key, T value, T defaultValue = T.init)
+	{
+		return get!T("Config", key, defaultValue);
 	}
 
 	/**
@@ -54,7 +90,8 @@ class LuaConfig : LuaAddonBase
 		state_[args] = value;
 	}
 
-	private LuaTable config_;
+	private string configTableName_;
+	private string fileName_;
 }
 
 ///
@@ -83,6 +120,13 @@ unittest
 		}
 
 		Exist = "I exist"
+
+		Config = {
+			number = 10,
+			hello = "Hello World!",
+			decimal = 3.14,
+			boolean = true
+		}
 	};
 
 	LuaConfig config = new LuaConfig;
