@@ -87,7 +87,7 @@ unittest
 
 	LuaConfig config = new LuaConfig;
 
-	config.loadString(configString);
+	config.doString(configString);
 
 	auto patterns = config.getTable("TodoTaskPatterns");
 	auto configVars = config.getTable("AppConfigVars");
@@ -127,6 +127,6 @@ unittest
 	enum emptyString = "";
 
 	LuaConfig emptyConfig = new LuaConfig;
-	bool loaded = emptyConfig.loadString(emptyString);
+	bool loaded = emptyConfig.doString(emptyString);
 	assert(loaded == false);
 }

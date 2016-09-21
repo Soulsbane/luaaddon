@@ -23,7 +23,7 @@ class LuaAddonBase
 	}
 
 	/**
-		Loads a config file using doFile.
+		Loads a config file using LuaD's doFile.
 
 		Params:
 			name = The config file to load.
@@ -31,7 +31,7 @@ class LuaAddonBase
 		Returns:
 			True if the file exists false otherwise.
 	*/
-	bool loadFile(const string name)
+	bool doFile(const string name)
 	{
 		if(name.exists)
 		{
@@ -50,11 +50,11 @@ class LuaAddonBase
 	*/
 	void loadFiles(const string[] paths...)
 	{
-		paths.each!(path => loadFile(path));
+		paths.each!(path => doFile(path));
 	}
 
 	/**
-		Loads a string using doString.
+		Loads a string using LuaD's doString.
 
 		Params:
 			data = The string to load.
@@ -62,7 +62,7 @@ class LuaAddonBase
 		Returns:
 			True if the string isn't empty false otherwise.
 	*/
-	bool loadString(const string data)
+	bool doString(const string data)
 	{
 		if(data.length)
 		{
