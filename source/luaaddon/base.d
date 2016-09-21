@@ -48,7 +48,7 @@ class LuaAddonBase
 		Params:
 			paths = A list of files to load.
 	*/
-	void loadFiles(const string[] paths...)
+	void doFiles(const string[] paths...)
 	{
 		paths.each!(path => doFile(path));
 	}
