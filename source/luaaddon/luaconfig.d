@@ -3,7 +3,45 @@
 */
 module luaaddon.luaconfig;
 
+import std.stdio : write;
+import std.string : chop;
+import std.range : repeat;
+import std.array : join;
+
 import luaaddon.base;
+
+private	string processTable(LuaTable table)
+{
+	string temp;
+
+	foreach(string key, LuaObject value; table)
+	{
+		if(value.type == LuaType.Table)
+		{
+			LuaTable table;
+
+			table.object = value;
+
+			temp ~= key ~ " = {";
+			temp ~= processTable(table);
+		}
+		else
+		{
+			if(value.type == LuaType.String)
+			{
+				temp ~= key ~ " = " ~ "\"" ~ value.toString ~ "\"" ~ ",";
+			}
+			else
+			{
+				temp ~= key ~ " = " ~ value.toString ~ ",";
+			}
+		}
+	}
+
+	temp ~= "},";
+
+	return temp;
+}
 
 /**
 	Allows the usage of Lua as a configuration file format.
@@ -42,6 +80,14 @@ class LuaConfig : LuaAddonBase
 		doString(text);
 	}
 
+	void save()
+	{
+		string temp = configTableName_ ~ " = {";
+		auto table = getTable(configTableName_);
+
+		temp ~= processTable(table);
+		write(temp.chop);
+	}
 	/**
 		Returns a table from a config file.
 
@@ -115,7 +161,10 @@ unittest
 
 		MultiLevel = {
 			SecondLevel = {
-				secondLevelValue = "Second level"
+				secondLevelValue = "Second level",
+				Another = {
+					world = "Another world"
+				}
 			}
 		}
 
@@ -173,4 +222,14 @@ unittest
 	LuaConfig emptyConfig = new LuaConfig;
 	bool loaded = emptyConfig.doString(emptyString);
 	assert(loaded == false);
+
+	LuaConfig multiConfig = new LuaConfig;
+	multiConfig.loadString(configString);
+	auto multiConfigVars = config.getTable("MultiLevel");
+
+	writeln;
+	writeln;
+
+	multiConfig.save();
+	writeln;
 }
