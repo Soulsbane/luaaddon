@@ -220,12 +220,11 @@ unittest
 	enum emptyString = "";
 
 	LuaConfig emptyConfig = new LuaConfig;
-	bool loaded = emptyConfig.doString(emptyString);
+	immutable bool loaded = emptyConfig.doString(emptyString);
 	assert(loaded == false);
 
 	LuaConfig multiConfig = new LuaConfig;
 	multiConfig.loadString(configString);
-	auto multiConfigVars = config.getTable("MultiLevel");
 
 	writeln;
 	writeln;
