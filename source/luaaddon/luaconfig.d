@@ -10,9 +10,10 @@ import std.array : join;
 
 import luaaddon.base;
 
-private	string processTable(LuaTable table)
+private	string processTable(LuaTable table, size_t currentDepth)
 {
 	string temp;
+	size_t depth = currentDepth + 1;
 
 	foreach(string key, LuaObject value; table)
 	{
@@ -22,24 +23,29 @@ private	string processTable(LuaTable table)
 
 			table.object = value;
 
-			temp ~= key ~ " = {";
-			temp ~= processTable(table);
+			temp ~= "\t".repeat(depth).join;
+			temp ~= key ~ " = {\n";
+			temp ~= processTable(table, depth);
 		}
 		else
 		{
 			if(value.type == LuaType.String)
 			{
-				temp ~= key ~ " = " ~ "\"" ~ value.toString ~ "\"" ~ ",";
+				temp ~= "\t".repeat(depth).join;
+				temp ~= key ~ " = " ~ "\"" ~ value.toString ~ "\"" ~ ",\n";
 			}
 			else
 			{
-				temp ~= key ~ " = " ~ value.toString ~ ",";
+				temp ~= "\t".repeat(depth).join;
+				temp ~= key ~ " = " ~ value.toString ~ ",\n";
 			}
 		}
 	}
 
-	temp ~= "},";
+	depth = depth - 1;
 
+	temp ~= "\t".repeat(depth).join;
+	temp ~= "},\n";
 	return temp;
 }
 
@@ -82,11 +88,11 @@ class LuaConfig : LuaAddonBase
 
 	void save()
 	{
-		string temp = configTableName_ ~ " = {";
+		string temp = configTableName_ ~ " = {\n";
 		auto table = getTable(configTableName_);
 
-		temp ~= processTable(table);
-		write(temp.chop);
+		temp ~= processTable(table, 0);
+		write(temp.chop.chop);
 	}
 	/**
 		Returns a table from a config file.
@@ -224,7 +230,7 @@ unittest
 	assert(loaded == false);
 
 	LuaConfig multiConfig = new LuaConfig;
-	multiConfig.loadString(configString);
+	multiConfig.loadString(configString, "MultiLevel");
 
 	writeln;
 	writeln;
