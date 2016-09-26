@@ -46,6 +46,7 @@ private	string processTable(LuaTable table, size_t currentDepth)
 
 	temp ~= "\t".repeat(depth).join;
 	temp ~= "},\n";
+
 	return temp;
 }
 
@@ -109,9 +110,17 @@ class LuaConfig : LuaAddonBase
 		return variable;
 	}
 
-	T as(T = string)(const string key, T value, T defaultValue = T.init)
+	/**
+		Returns a value of type T associated with the key from 'Config' table.
+		Use 'get' method if you want to access another table beside 'Config'.
+
+		Params:
+			key = The config variable that should be returned.
+			defaultValue = The default value if the variable can't be found.
+	*/
+	T as(T = string)(const string key, T defaultValue = T.init)
 	{
-		return get!T("Config", key, defaultValue);
+		return get!T(configTableName_, key, defaultValue);
 	}
 
 	/**
