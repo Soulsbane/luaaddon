@@ -6,13 +6,14 @@ module luaaddon.luaconfig;
 import std.stdio : write;
 import std.string : chop;
 import std.range : repeat;
-import std.array : join;
+import std.array : join, Appender, appender;
 
 import luaaddon.base;
 
 private	string processTable(LuaTable table, size_t currentDepth)
 {
-	string temp;
+	auto temp = appender!string();
+
 	size_t depth = currentDepth + 1;
 
 	foreach(string key, LuaObject value; table)
@@ -23,31 +24,38 @@ private	string processTable(LuaTable table, size_t currentDepth)
 
 			table.object = value;
 
-			temp ~= "\t".repeat(depth).join;
-			temp ~= key ~ " = {\n";
-			temp ~= processTable(table, depth);
+			temp.put("\t".repeat(depth).join);
+			temp.put(key);
+			temp.put(" = {\n");
+			temp.put(processTable(table, depth));
 		}
 		else
 		{
 			if(value.type == LuaType.String)
 			{
-				temp ~= "\t".repeat(depth).join;
-				temp ~= key ~ " = " ~ "\"" ~ value.toString ~ "\"" ~ ",\n";
+				temp.put("\t".repeat(depth).join);
+				temp.put(key);
+				temp.put(" = \"");
+				temp.put(value.toString);
+				temp.put("\",\n");
 			}
 			else
 			{
-				temp ~= "\t".repeat(depth).join;
-				temp ~= key ~ " = " ~ value.toString ~ ",\n";
+				temp.put("\t".repeat(depth).join);
+				temp.put(key);
+				temp.put(" = ");
+				temp.put(value.toString);
+				temp.put(",\n");
 			}
 		}
 	}
 
 	depth = depth - 1;
 
-	temp ~= "\t".repeat(depth).join;
-	temp ~= "},\n";
+	temp.put("\t".repeat(depth).join);
+	temp.put("},\n");
 
-	return temp;
+	return temp.data;
 }
 
 /**
