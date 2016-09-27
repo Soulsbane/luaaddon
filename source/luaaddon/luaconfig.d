@@ -3,12 +3,13 @@
 */
 module luaaddon.luaconfig;
 
-import std.stdio : write;
+import std.stdio : write, File;
 import std.string : chop;
 import std.range : repeat;
 import std.array : join, Appender, appender;
 
 import luaaddon.base;
+private enum DEFAULT_CONFIG_FILE_NAME = "config.lua";
 
 private	string processTable(LuaTable table, size_t currentDepth)
 {
@@ -95,14 +96,37 @@ class LuaConfig : LuaAddonBase
 		doString(text);
 	}
 
+	/**
+		Saves config values to the config file.
+	*/
 	void save()
 	{
+		save(fileName_);
+	}
+
+	/**
+		Saves config values to the config file.
+
+		Params:
+			fileName = Name of the file to save config values to.
+	*/
+	void save(const string configFileName)
+	{
+		string fileName = configFileName;
+
+		if(!fileName.length)
+		{
+			fileName = DEFAULT_CONFIG_FILE_NAME;
+		}
+
 		string temp = configTableName_ ~ " = {\n";
 		auto table = getTable(configTableName_);
+		auto configFile = File(fileName, "w+");
 
 		temp ~= processTable(table, 0);
-		write(temp.chop.chop);
+		configFile.write(temp.chop.chop); // Remove \n and trailing period from string before writing.
 	}
+
 	/**
 		Returns a table from a config file.
 
