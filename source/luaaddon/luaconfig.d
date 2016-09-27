@@ -210,7 +210,8 @@ unittest
 			SecondLevel = {
 				secondLevelValue = "Second level",
 				Another = {
-					world = "Another world"
+					world = "Another world",
+					number = 42
 				}
 			}
 		}
