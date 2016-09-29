@@ -10,7 +10,7 @@ import std.regex : matchFirst, ctRegex;
 import std.algorithm;
 import std.conv : to;
 
-enum TOC_LINE_PATTERN = r"##\s+(?P<key>.*):\s+(?P<value>.*)";
+private enum TOC_LINE_PATTERN = r"##\s+(?P<key>.*):\s+(?P<value>.*)";
 
 /// Parses TOC(Table of Contents) files like those found in World of Warcraft.
 struct TocParser
