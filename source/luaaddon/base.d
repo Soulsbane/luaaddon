@@ -23,10 +23,10 @@ class LuaAddonBase
 	}
 
 	/**
-		Loads a config file using LuaD's doFile.
+		Loads a Lua file using LuaD's doFile.
 
 		Params:
-			name = The config file to load.
+			name = The file to load.
 
 		Returns:
 			True if the file exists false otherwise.
