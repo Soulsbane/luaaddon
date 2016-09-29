@@ -135,6 +135,9 @@ struct TocParser
 		return defaultValue;
 	}
 
+	/// Useful when you want to use getValue!T to convey the calls meaning better.
+	alias as = getValue;
+
 	/**
 		Gets the list of file that a TOC file contains.
 
