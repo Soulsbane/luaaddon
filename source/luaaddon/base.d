@@ -3,9 +3,7 @@
 */
 module luaaddon.base;
 
-import std.algorithm : each;
 import std.file : exists;
-import std.stdio : writeln;
 
 public import luad.all;
 import luad.c.all;
@@ -15,6 +13,7 @@ import luad.c.all;
 */
 class LuaAddonBase
 {
+	///
 	this()
 	{
 		// FIXME: Workaround for a LuaD bug  where LuaState is used but was already destroyed. See LuaD issue# 11.
@@ -68,10 +67,23 @@ class LuaAddonBase
 
 		Params:
 			paths = A list of files to load.
+
+		Returns:
+			True if all files were found false otherwise.
 	*/
-	void doFiles(const string[] paths...)
+	bool doFiles(const string[] paths...)
 	{
-		paths.each!(path => doFile(path));
+		foreach(path; paths)
+		{
+			immutable bool found = doFile(path);
+
+			if(!found)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
