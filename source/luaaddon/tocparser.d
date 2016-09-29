@@ -1,3 +1,6 @@
+/**
+	Provides functionality for parsing TOC(Table of Contents) files like those found in World of Warcraft.
+*/
 module luaaddon.tocparser;
 
 import std.stdio;
@@ -9,8 +12,15 @@ import std.conv : to;
 
 enum TOC_LINE_PATTERN = r"##\s+(?P<key>.*):\s+(?P<value>.*)";
 
+/// Parses TOC(Table of Contents) files like those found in World of Warcraft.
 struct TocParser
 {
+	/**
+		Processes text containing the TOC format.
+
+		Params:
+			text = The text to be processed.
+	*/
 	void processText(const string text)
 	{
 		auto lines = text.lineSplitter();
@@ -46,6 +56,15 @@ struct TocParser
 		}
 	}
 
+	/**
+		Loads and processes a string containing the TOC text.
+
+		Params:
+			text = The text to process.
+
+		Returns:
+			True if the text has a length(not empty) false otherwise.
+	*/
 	bool loadString(const string text)
 	{
 		if(text.length)
@@ -57,6 +76,15 @@ struct TocParser
 		return false;
 	}
 
+	/**
+		Loads and processes a file that contains the TOC text.
+
+		Params:
+			fileName = The name of the file to process.
+
+		Returns:
+			True if the file could be found false otherwise.
+	*/
 	bool loadFile(const string fileName)
 	{
 		if(fileName.exists)
@@ -68,6 +96,15 @@ struct TocParser
 		return false;
 	}
 
+	/**
+		Checks if a TOC field can be found.
+
+		Params:
+			name = The name of the field to find.
+
+		Returns:
+			True if the field was found false otherwise.
+	*/
 	bool hasField(const string name)
 	{
 		if(name in fields_)
@@ -78,6 +115,16 @@ struct TocParser
 		return false;
 	}
 
+	/**
+		Gets the value for a given field.
+
+		Params:
+			name = Name of the field to get the value for.
+			defaultValue = The default value if the field wasn't found.
+
+		Returns:
+			The fields value if it was found otherwise the defaultValue.
+	*/
 	T getValue(T = string)(const string name, T defaultValue = T.init)
 	{
 		if(hasField(name))
@@ -88,6 +135,12 @@ struct TocParser
 		return defaultValue;
 	}
 
+	/**
+		Gets the list of file that a TOC file contains.
+
+		Returns:
+			A list of files that a TOC file contains.
+	*/
 	string[] getFilesList()
 	{
 		return filesList_;
