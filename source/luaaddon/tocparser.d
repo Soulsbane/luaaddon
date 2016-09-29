@@ -7,14 +7,14 @@ import std.regex : matchFirst, ctRegex;
 import std.algorithm;
 import std.conv : to;
 
-enum _TocLinePattern = r"##\s+(?P<key>.*):\s+(?P<value>.*)";
+enum TOC_LINE_PATTERN = r"##\s+(?P<key>.*):\s+(?P<value>.*)";
 
 struct TocParser
 {
 	void processText(const string text)
 	{
 		auto lines = text.lineSplitter();
-		auto linePattern = ctRegex!(_TocLinePattern);
+		auto linePattern = ctRegex!(TOC_LINE_PATTERN);
 
 		foreach(line; lines)
 		{
