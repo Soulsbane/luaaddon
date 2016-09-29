@@ -43,6 +43,27 @@ class LuaAddonBase
 	}
 
 	/**
+		Loads, executes and passes arguments to a Lua file using LuaD's loadFile.
+
+		Params:
+			name = The file to load.
+			args = The arguments to pass to the Lua chunk/file.
+
+		Returns:
+			True if the file exists false otherwise.
+	*/
+	bool loadFile(T...)(const string name, T args)
+	{
+		if(name.exists)
+		{
+			state_.loadFile(name)(args);
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 		Loads a Lua file(s) using doFile.
 
 		Params:
