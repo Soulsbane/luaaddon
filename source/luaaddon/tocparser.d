@@ -146,18 +146,6 @@ struct TocParser
 		return filesList_;
 	}
 
-	void dump()
-	{
-		writeln("=====================Key Value Fields=======================");
-		foreach(key, value; fields_)
-		{
-			writeln(key, " => ", value);
-		}
-
-		writeln("========================Files List==========================");
-		each!writeln(filesList_);
-	}
-
 private:
 	string[] filesList_;
 	string[string] fields_;
