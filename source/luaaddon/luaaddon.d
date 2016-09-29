@@ -14,12 +14,14 @@ import luaaddon.base;
 ///Main type for creating a Lua addon.
 class LuaAddon : LuaAddonBase
 {
+	///
 	this()
 	{
 		state_.openLibs();
 		state_.setPanicHandler(&panic);
 	}
 
+	///
 	static void panic(LuaState lua, in char[] error)
 	{
 		writeln("Error in addon code!\n", error, "\n");
@@ -160,7 +162,7 @@ class LuaAddon : LuaAddonBase
 		Registers a path that lua code will search for packages/modules.
 
 		Params:
-			path = A list of path names to register.
+			paths = A list of path names to register.
 	*/
 	void registerPackagePaths(const string[] paths...)
 	{
@@ -170,6 +172,7 @@ class LuaAddon : LuaAddonBase
 		state_["package", "path"] = packagePaths.chop; // Remove trailing semicolon.
 	}
 
+	///
 	auto opDispatch(string funcName, T...)(T args)
 	{
 		return mixin("state_." ~ funcName ~ "(args)");

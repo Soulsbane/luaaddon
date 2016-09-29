@@ -108,7 +108,7 @@ class LuaConfig : LuaAddonBase
 		Saves config values to the config file.
 
 		Params:
-			fileName = Name of the file to save config values to.
+			configFileName = Name of the file to save config values to.
 	*/
 	void save(const string configFileName)
 	{
@@ -177,6 +177,7 @@ class LuaConfig : LuaAddonBase
 
 		Params:
 			args = A list of tables or variables that that will be set.
+			value = The value to set the table to.
 	*/
 	void set(T, S...)(S args, T value)
 	{
