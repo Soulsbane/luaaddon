@@ -4,9 +4,12 @@
 module luaaddon.base;
 
 import std.file : exists;
+import std.typecons : Tuple;
 
 public import luad.all;
 import luad.c.all;
+
+alias DoFilesReturnType = Tuple!(bool, "found", string, "path");
 
 /**
 	Provides a base class for LuaAddon and LuaConfig.
@@ -71,7 +74,7 @@ class LuaAddonBase
 		Returns:
 			True if all files were found false otherwise.
 	*/
-	bool doFiles(const string[] paths...)
+	DoFilesReturnType doFiles(const string[] paths...)
 	{
 		foreach(path; paths)
 		{
@@ -79,11 +82,11 @@ class LuaAddonBase
 
 			if(!found)
 			{
-				return false;
+				return DoFilesReturnType(false, path);
 			}
 		}
 
-		return true;
+		return DoFilesReturnType(true, string.init);
 	}
 
 	/**
