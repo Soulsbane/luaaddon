@@ -11,7 +11,7 @@ import std.array : join, Appender, appender;
 import luaaddon.base;
 private enum DEFAULT_CONFIG_FILE_NAME = "config.lua";
 
-private	string processTable(LuaTable table, size_t currentDepth)
+private	string processTable(LuaTable table, const size_t currentDepth)
 {
 	auto temp = appender!string();
 
