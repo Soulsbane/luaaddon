@@ -116,7 +116,7 @@ class LuaAddon : LuaAddonBase
 		Params:
 			names = A list of table names to be created.
 	*/
-	void createNewTable(string[] names...)
+	void createTable(string[] names...)
 	{
 		names.each!(name =>	state_[name] = state_.newTable);
 	}
@@ -135,7 +135,7 @@ class LuaAddon : LuaAddonBase
 		{
 			if(!hasTable(tableName))
 			{
-				createNewTable(tableName);
+				createTable(tableName);
 			}
 
 			state_[tableName, funcName] = func;
