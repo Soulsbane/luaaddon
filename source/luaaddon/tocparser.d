@@ -10,11 +10,12 @@ import std.regex : matchFirst, ctRegex;
 import std.algorithm;
 import std.conv : to;
 
-private enum TOC_LINE_PATTERN = r"##\s+(?P<key>.*):\s+(?P<value>.*)";
 
 /// Parses TOC(Table of Contents) files like those found in World of Warcraft.
 struct TocParser
 {
+	private enum TOC_LINE_PATTERN = r"#{1,}\s*(?P<key>.*):\s*(?P<value>.*)";
+
 	/**
 		Processes text containing the TOC format.
 
@@ -30,11 +31,7 @@ struct TocParser
 		{
 			line = strip(line);
 
-			if(line.empty)
-			{
-				continue;
-			}
-			else if(line.startsWith("#"))
+			if(line.startsWith("##"))
 			{
 				auto re = matchFirst(line, linePattern);
 
@@ -45,6 +42,10 @@ struct TocParser
 
 					fields_[key] = value;
 				}
+			}
+			else if(line.empty || line.startsWith("#")) // Line is a comment or empty.
+			{
+				continue;
 			}
 			else // Line is a file name
 			{
