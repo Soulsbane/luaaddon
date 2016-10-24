@@ -37,7 +37,7 @@ struct TocParser
 				if(!re.empty)
 				{
 					immutable string key = re["key"];
-					immutable value = re["value"];
+					immutable string value = re["value"];
 
 					fields_[key] = value;
 				}
