@@ -10,7 +10,6 @@ import std.regex : matchFirst, ctRegex;
 import std.algorithm;
 import std.conv : to;
 
-
 /// Parses TOC(Table of Contents) files like those found in World of Warcraft.
 struct TocParser
 {
@@ -22,7 +21,7 @@ struct TocParser
 		Params:
 			text = The text to be processed.
 	*/
-	void processText(const string text)
+	void processText(const string text) @safe
 	{
 		auto lines = text.lineSplitter();
 		auto linePattern = ctRegex!(TOC_LINE_PATTERN);
@@ -38,7 +37,7 @@ struct TocParser
 				if(!re.empty)
 				{
 					const string key = re["key"];
-					const string value = re["value"];
+					const value = re["value"];
 
 					fields_[key] = value;
 				}
@@ -66,7 +65,7 @@ struct TocParser
 		Returns:
 			True if the text has a length(not empty) false otherwise.
 	*/
-	bool loadString(const string text)
+	bool loadString(const string text) @safe
 	{
 		if(text.length)
 		{
@@ -106,7 +105,7 @@ struct TocParser
 		Returns:
 			True if the field was found false otherwise.
 	*/
-	bool hasField(const string name)
+	bool hasField(const string name) pure @safe
 	{
 		if(name in fields_)
 		{
@@ -126,7 +125,7 @@ struct TocParser
 		Returns:
 			The fields value if it was found otherwise the defaultValue.
 	*/
-	T getValue(T = string)(const string name, T defaultValue = T.init)
+	T getValue(T = string)(const string name, T defaultValue = T.init) pure @safe
 	{
 		if(hasField(name))
 		{
@@ -145,7 +144,7 @@ struct TocParser
 		Returns:
 			A list of files that a TOC file contains.
 	*/
-	string[] getFilesList()
+	string[] getFilesList() pure @safe
 	{
 		return filesList_;
 	}
