@@ -6,14 +6,14 @@ module luaaddon.tocparser;
 import std.stdio;
 import std.file;
 import std.string;
-import std.regex : matchFirst, ctRegex;
+import std.regex : matchFirst, ctRegex, regex;
 import std.algorithm;
 import std.conv : to;
 
 /// Parses TOC(Table of Contents) files like those found in World of Warcraft.
 struct TocParser
 {
-	private enum TOC_LINE_PATTERN = r"#{1,}\s*(?P<key>.*):\s*(?P<value>.*)";
+	private enum TOC_LINE_PATTERN = "#{1,}\\s*(?P<key>.*):\\s*(?P<value>.*)";
 
 	/**
 		Processes text containing the TOC format.
@@ -24,7 +24,7 @@ struct TocParser
 	void processText(const string text) @safe
 	{
 		auto lines = text.lineSplitter();
-		auto linePattern = ctRegex!(TOC_LINE_PATTERN);
+		auto linePattern = regex(TOC_LINE_PATTERN);
 
 		foreach(line; lines)
 		{
