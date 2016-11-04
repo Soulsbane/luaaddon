@@ -24,7 +24,7 @@ struct TocParser
 	void processText(const string text) @safe
 	{
 		auto lines = text.lineSplitter();
-		auto linePattern = regex(TOC_LINE_PATTERN);
+		auto linePattern = ctRegex!(TOC_LINE_PATTERN);
 
 		foreach(line; lines)
 		{
