@@ -31,7 +31,7 @@ struct TocParser
 			{
 				auto values = line.chompPrefix("##").strip.splitter(":").array;
 
-				if(values.length)
+				if(values.length == 2)
 				{
 					immutable string key = values[0].strip;
 					immutable string value = values[1].strip;
