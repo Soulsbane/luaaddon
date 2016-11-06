@@ -19,7 +19,7 @@ struct TocParser
 		Params:
 			text = The text to be processed.
 	*/
-	void processText(const string text) @safe
+	void processText(const string text) pure @safe
 	{
 		auto lines = text.lineSplitter();
 
@@ -62,7 +62,7 @@ struct TocParser
 		Returns:
 			True if the text has a length(not empty) false otherwise.
 	*/
-	bool loadString(const string text) @safe
+	bool loadString(const string text) pure @safe
 	{
 		if(text.length)
 		{
@@ -102,7 +102,7 @@ struct TocParser
 		Returns:
 			True if the field was found false otherwise.
 	*/
-	bool hasField(const string name) pure @safe
+	bool hasField(const string name) pure nothrow @safe
 	{
 		if(name in fields_)
 		{
