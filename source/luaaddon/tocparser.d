@@ -146,6 +146,20 @@ struct TocParser
 		return filesList_;
 	}
 
+	/**
+		Returns a fields value.
+
+		Params:
+			name = Name of the field to return.
+
+		Returns:
+			The value of the specified field.
+	*/
+	string opIndex(const string name)
+	{
+		return getValue(name, string.init);
+	}
+
 private:
 	string[] filesList_;
 	string[string] fields_;
@@ -171,6 +185,7 @@ unittest
 	assert(parser.getValue("Animal", "Cat") == "Cat");
 	assert(parser.as!uint("Number") == 100);
 	assert(parser.getFilesList().length == 3);
+	assert(parser["Author"] == "Alan");
 
 	immutable string empty;
 	TocParser emptyParser;
