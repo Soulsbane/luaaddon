@@ -150,3 +150,30 @@ private:
 	string[] filesList_;
 	string[string] fields_;
 }
+
+unittest
+{
+	immutable string tocData = q{
+		##Author: Alan
+		##Description: A short description.
+		##Number: 100
+		file.d
+		app.d
+		app.lua
+	};
+
+	TocParser parser;
+
+	parser.loadString(tocData);
+	assert(parser.hasField("Author") == true);
+	assert(parser.hasField("NotAuthor") == false);
+	assert(parser.getValue("Author") == "Alan");
+	assert(parser.getValue("Animal", "Cat") == "Cat");
+	assert(parser.as!uint("Number") == 100);
+	assert(parser.getFilesList().length == 3);
+
+	immutable string empty;
+	TocParser emptyParser;
+
+	assert(emptyParser.loadString(empty) == false);
+}
