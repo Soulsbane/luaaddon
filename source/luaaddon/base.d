@@ -3,7 +3,8 @@
 */
 module luaaddon.base;
 
-import std.file : exists;
+import std.file : exists, write;
+import std.stdio : File;
 import std.typecons : Tuple;
 
 public import luad.all;
@@ -63,6 +64,33 @@ class LuaAddonBase
 		}
 
 		return false;
+	}
+
+	bool createAndLoadFile(T...)(const string name, const string data, T args)
+	{
+		immutable string defaultString = data;
+
+		debug
+		{
+			doString(data);
+			return true;
+		}
+		else
+		{
+			if(!name.exists)
+			{
+				auto f = File(name, "w+");
+
+				if(data != string.init)
+				{
+					f.write(data);
+				}
+			}
+
+			doFile(name);
+
+			return name.exists;
+		}
 	}
 
 	/**
