@@ -66,6 +66,17 @@ class LuaAddonBase
 		return false;
 	}
 
+	/**
+		Loads Lua code using doString in debug build and saves Lua code to a file and loads the file using doFile.
+
+		Params:
+			name = The name of the file to save the Lua code to.
+			data = The Lua code to save.
+			args = arguments to pass to doFile.
+
+		Returns:
+			Always true in debug build. In any other build type it returns true of the file was created successfully.
+	*/
 	bool createAndLoadFile(T...)(const string name, const string data, T args)
 	{
 		immutable string defaultString = data;
