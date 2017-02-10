@@ -10,6 +10,7 @@ import std.string : chop;
 import std.stdio : writeln;
 
 import luaaddon.base;
+import luaaddon.tocparser;
 
 ///Main type for creating a Lua addon.
 class LuaAddon : LuaAddonBase
@@ -172,9 +173,27 @@ class LuaAddon : LuaAddonBase
 		state_["package", "path"] = packagePaths.chop; // Remove trailing semicolon.
 	}
 
+	string getAuthor()
+	{
+		return toc_.getValue("Author", "Author");
+	}
+
+	string getDescription()
+	{
+		return toc_.getValue("Description", "");
+	}
+
+	size_t getVersion()
+	{
+		return toc_.getValue!size_t("Version", 10_000);
+	}
+
 	///
 	auto opDispatch(string funcName, T...)(T args)
 	{
 		return mixin("state_." ~ funcName ~ "(args)");
 	}
+
+private:
+	TocParser toc_;
 }
