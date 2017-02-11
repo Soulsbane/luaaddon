@@ -183,6 +183,11 @@ class LuaAddon : LuaAddonBase
 		return toc_.getValue("Description", "");
 	}
 
+	string getName()
+	{
+		return toc_.getValue("Name", "");
+	}
+
 	size_t getVersion()
 	{
 		return toc_.getValue!size_t("Version", 10_000);
