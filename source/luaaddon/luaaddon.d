@@ -201,7 +201,14 @@ class LuaAddon : LuaAddonBase
 	///
 	auto opDispatch(string funcName, T...)(T args)
 	{
-		return mixin("state_." ~ funcName ~ "(args)");
+		static if(__traits(hasMember, TocParser, functionName))
+		{
+			return mixin("toc_." ~ funcName ~ "(args)");
+		}
+		else
+		{
+			return mixin("state_." ~ funcName ~ "(args)");
+		}
 	}
 
 private:
