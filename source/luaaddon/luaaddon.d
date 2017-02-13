@@ -193,19 +193,16 @@ class LuaAddon : LuaAddonBase
 		return toc_.getValue!size_t("Version", 10_000);
 	}
 
-	alias getTOCValue = toc_.getValue;
+	alias loadTocString = toc_.loadString;
+	alias loadTocFile = toc_.loadFile;
+	alias hasTocField = toc_.hasField;
+	alias getTocValue = toc_.getValue;
+	alias getTocFilesList = toc_.getFilesList;
 
 	///
 	auto opDispatch(string funcName, T...)(T args)
 	{
-		static if(__traits(hasMember, TocParser, functionName))
-		{
-			return mixin("toc_." ~ funcName ~ "(args)");
-		}
-		else
-		{
-			return mixin("state_." ~ funcName ~ "(args)");
-		}
+		return mixin("state_." ~ funcName ~ "(args)");
 	}
 
 private:
