@@ -193,10 +193,7 @@ class LuaAddon : LuaAddonBase
 		return toc_.getValue!size_t("Version", 10_000);
 	}
 
-	T getTOCValue(T = string)(const string name, T defaultValue = T.init) pure @safe
-	{
-		return toc_.getValue!T(name, defaultValue);
-	}
+	alias getTOCValue = toc_.getValue;
 
 	///
 	auto opDispatch(string funcName, T...)(T args)
