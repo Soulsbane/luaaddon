@@ -10,6 +10,8 @@ import std.algorithm : splitter;
 import std.conv : to;
 import std.array;
 
+import dstringutils.utils;
+
 /// Parses TOC(Table of Contents) files like those found in World of Warcraft.
 struct TocParser
 {
@@ -45,7 +47,8 @@ struct TocParser
 			}
 			else // Line is a file name
 			{
-				if(line.length != line.countchars(" ")) // Make sure line isn't only whitespace
+				//if(line.length != line.countChars(" ")) // Make sure line isn't only whitespace
+				if(!line.hasOnlySpaces()) // Make sure line isn't only whitespace
 				{
 					filesList_ ~= line;
 				}

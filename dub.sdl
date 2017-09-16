@@ -9,3 +9,5 @@ configuration "library" {
 	targetType "library"
 }
 libs "lua5.1" platform="posix"
+
+dependency "dstringutils" version="*"
