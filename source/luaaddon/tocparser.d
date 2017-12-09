@@ -12,9 +12,13 @@ import std.array;
 
 import dstringutils.utils;
 
+struct DefaultNamedMethods {}
+
 /// Parses TOC(Table of Contents) files like those found in World of Warcraft.
-struct TocParser
+struct TocParser(NamedMethods = DefaultNamedMethods)
 {
+	mixin(generateNamedMethods!NamedMethods);
+
 	/**
 		Processes text containing the TOC format.
 
@@ -168,6 +172,40 @@ private:
 	string[string] fields_;
 }
 
+/*
+	This function generates the following code based on the passed struct.
+
+	struct Methods
+	{
+		string author;
+	}
+
+	string getAuthor(const string name, string defaultValue = string.init) pure @safe
+	{
+		return getValue!string(name, defaultValue);
+	}
+*/
+private string generateNamedMethods(T)()
+{
+	string code;
+
+	foreach (i, memberType; typeof(T.tupleof))
+	{
+		immutable string memType = memberType.stringof;
+		immutable string memName = T.tupleof[i].stringof;
+		immutable string memNameCapitalized = memName[0].toUpper.to!string ~ memName[1..$];
+
+		code ~= format(q{
+			%s get%s(%s defaultValue = %s.init) pure @safe
+			{
+				return getValue!%s("%s", defaultValue);
+			}
+		}, memType, memNameCapitalized, memType, memType, memType, memNameCapitalized);
+	}
+
+	return code;
+}
+
 unittest
 {
 	immutable string tocData = q{
@@ -179,7 +217,7 @@ unittest
 		app.lua
 	};
 
-	TocParser parser;
+	TocParser!() parser;
 
 	parser.loadString(tocData);
 	assert(parser.hasField("Author") == true);
@@ -191,7 +229,21 @@ unittest
 	assert(parser["Author"] == "Alan");
 
 	immutable string empty;
-	TocParser emptyParser;
+	TocParser!() emptyParser;
 
 	assert(emptyParser.loadString(empty) == false);
+
+	struct Methods
+	{
+		string author;
+		uint number;
+		uint count;
+	}
+
+	TocParser!Methods parserWithMethods;
+
+	parserWithMethods.loadString(tocData);
+	assert(parserWithMethods.getAuthor() == "Alan");
+	assert(parserWithMethods.getNumber() == 100);
+	assert(parserWithMethods.getCount(777) == 777);
 }

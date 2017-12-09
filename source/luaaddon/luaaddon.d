@@ -206,5 +206,5 @@ class LuaAddon : LuaAddonBase
 	}
 
 private:
-	TocParser toc_;
+	TocParser!() toc_;
 }
