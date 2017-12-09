@@ -6,5 +6,6 @@ __dummy.html
 
 libluaaddon.a
 __test__library__
+luaaddon-test-library
 config.lua
 docs
