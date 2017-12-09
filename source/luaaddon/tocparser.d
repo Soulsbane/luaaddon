@@ -15,6 +15,7 @@ import dstringutils.utils;
 struct DefaultNamedMethods {}
 
 /// Parses TOC(Table of Contents) files like those found in World of Warcraft.
+/// Note that in order to use this without passing a struct you must initialize it like so: TocParser!() parser;
 struct TocParser(NamedMethods = DefaultNamedMethods)
 {
 	mixin(generateNamedMethods!NamedMethods);
