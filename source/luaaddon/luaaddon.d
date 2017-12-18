@@ -173,6 +173,12 @@ class LuaAddon : LuaAddonBase
 		state_["package", "path"] = packagePaths.chop; // Remove trailing semicolon.
 	}
 
+	/**
+		Gets the Version field of the TOC file.
+
+		Returns:
+			An integer or 10_000 by default if not found.
+	*/
 	size_t getVersion()
 	{
 		return toc_.getValue!size_t("Version", 10_000);
