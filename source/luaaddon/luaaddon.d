@@ -173,21 +173,6 @@ class LuaAddon : LuaAddonBase
 		state_["package", "path"] = packagePaths.chop; // Remove trailing semicolon.
 	}
 
-	/*string getAuthor()
-	{
-		return toc_.getValue("Author", "Author");
-	}
-
-	string getDescription()
-	{
-		return toc_.getValue("Description", "");
-	}
-
-	string getName()
-	{
-		return toc_.getValue("Name", "");
-	}*/
-
 	size_t getVersion()
 	{
 		return toc_.getValue!size_t("Version", 10_000);
