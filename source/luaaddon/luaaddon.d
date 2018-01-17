@@ -197,11 +197,5 @@ class LuaAddon : LuaAddonBase
 	}
 
 private:
-	struct AdditionalFields
-	{
-		string author;
-		string description;
-		string name;
-	}
-	TocParser!AdditionalFields toc_;
+	TocParser!() toc_;
 }

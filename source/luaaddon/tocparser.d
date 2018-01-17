@@ -12,7 +12,12 @@ import std.array;
 
 import dstringutils.utils;
 
-struct DefaultNamedMethods {}
+struct DefaultNamedMethods
+{
+	string author;
+	string description;
+	string name;
+}
 
 /// Parses TOC(Table of Contents) files like those found in World of Warcraft.
 /// Note that in order to use this without passing a struct you must initialize it like so: TocParser!() parser;
