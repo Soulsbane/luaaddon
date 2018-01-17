@@ -184,12 +184,6 @@ class LuaAddon : LuaAddonBase
 		return toc_.getValue!size_t("Version", 10_000);
 	}
 
-	alias loadTocString = toc_.loadString;
-	alias loadTocFile = toc_.loadFile;
-	alias hasTocField = toc_.hasField;
-	alias getTocValue = toc_.getValue;
-	alias getTocFilesList = toc_.getFilesList;
-
 	///
 	auto opDispatch(string funcName, T...)(T args)
 	{
@@ -198,4 +192,5 @@ class LuaAddon : LuaAddonBase
 
 private:
 	TocParser!() toc_;
+	alias toc_ this;
 }
