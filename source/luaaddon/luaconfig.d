@@ -184,6 +184,36 @@ class LuaConfig : LuaAddonBase
 		state_[args] = value;
 	}
 
+	/**
+		Gets the value of a variable in a lua config file.
+
+		Params:
+			name = The name of the variable value to get.
+
+		Returns:
+			The value converted to T.
+	*/
+	T getVariableValue(T = string)(string name)
+	{
+		return state_.get!T(name);
+	}
+
+	/**
+		Gets the value of a table variable in a lua config file.
+
+		Params:
+			tableName = The name of the table to get variable value from.
+			name = The name of the variable to get.
+
+		Returns:
+			The value converted to T.
+	*/
+	T getTableVariableValue(T = string)(const string tableName, const string name)
+	{
+		auto value = state_.get!T(tableName, name);
+		return value;
+	}
+
 	private string configTableName_;
 	private string fileName_;
 }
