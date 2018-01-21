@@ -53,30 +53,6 @@ public:
 		}
 	}
 
-	// TODO: Perhaps support these methods?
-	/*string getOutputDir()
-	{
-		return buildNormalizedPath(getcwd(), getValueFor("ProjectName"));
-	}
-
-	bool createDirInOutputDir(const(char)[][] params...)
-	{
-		immutable string path = buildNormalizedPath(params);
-		return ensurePathExists(buildNormalizedPath(getOutputDir(), path));
-	}
-
-	bool removeDirFromOutputDir(const string dir)
-	{
-		return removePathIfExists(getOutputDir(), dir);
-	}
-
-	bool outputDirExists(const string dir)
-	{
-		string file = buildNormalizedPath(getOutputDir(), dir);
-		return file.exists;
-	}
-	*/
-
 	string getModuleDir()
 	{
 		debug
