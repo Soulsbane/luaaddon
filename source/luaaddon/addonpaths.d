@@ -107,6 +107,18 @@ public:
 		return buildNormalizedPath(getAddonDir(), "templates");
 	}
 
+	string getConfigDir()
+	{
+		//return buildNormalizedPath(writablePath(StandardPath.config), organizationName, applicationName);
+		return configPath_.getDir();
+	}
+
+	string getConfigFilesDir()
+	{
+		//return buildNormalizedPath(writablePath(StandardPath.config), organizationName, applicationName, "config");
+		return configPath_.getDir("config");
+	}
+
 private:
 	string addonName_;
 	ConfigPath configPath_;
