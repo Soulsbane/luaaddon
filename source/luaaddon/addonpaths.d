@@ -21,7 +21,7 @@ public:
 	void create(const string addonName, const string applicationName, const string organizationName = string.init)
 	{
 		addonName_ = addonName;
-		configPath_ .create(organizationName, applicationName);
+		configPath_.create(organizationName, applicationName);
 	}
 
 	string getInstallDir()
