@@ -33,11 +33,11 @@ public:
 	{
 		debug
 		{
-			return buildNormalizedPath(getInstallDir(), "addons");
+			return buildNormalizedPath(getInstallDir(), getAddonDirName());
 		}
 		else
 		{
-			return configPath_.getDir("generators");
+			return configPath_.getDir(getAddonDirName());
 		}
 	}
 
@@ -45,11 +45,11 @@ public:
 	{
 		debug
 		{
-			return buildNormalizedPath(getInstallDir(), "generators", generatorName);
+			return buildNormalizedPath(getInstallDir(), getAddonDirName(), generatorName);
 		}
 		else
 		{
-			return configPath_.getDir("generators", generatorName);
+			return configPath_.getDir(getAddonDirName(), generatorName);
 		}
 	}
 
@@ -109,18 +109,27 @@ public:
 
 	string getConfigDir()
 	{
-		//return buildNormalizedPath(writablePath(StandardPath.config), organizationName, applicationName);
 		return configPath_.getDir();
 	}
 
 	string getConfigFilesDir()
 	{
-		//return buildNormalizedPath(writablePath(StandardPath.config), organizationName, applicationName, "config");
 		return configPath_.getDir("config");
+	}
+
+	string getAddonDirName()
+	{
+		return addonDirName_;
+	}
+
+	void setAddonDirName(const string addonDirName)
+	{
+		addonDirName_ = addonDirName;
 	}
 
 private:
 	string addonName_;
+	string addonDirName_ = "addons";
 	ConfigPath configPath_;
 }
 
