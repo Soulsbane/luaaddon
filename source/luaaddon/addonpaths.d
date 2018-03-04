@@ -127,6 +127,16 @@ public:
 		addonDirName_ = addonDirName;
 	}
 
+	string getAddonName()
+	{
+		return addonName_;
+	}
+
+	void setAddonName(const string addonName)
+	{
+		addonName_ = addonName;
+	}
+
 private:
 	string addonName_;
 	string addonDirName_ = "addons";
