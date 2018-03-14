@@ -232,7 +232,7 @@ unittest
 			["[;'#-*@/]*\\s*(?P<tag>INFO|NOTE|FIXME|TODO|XXX):?\\s*(?P<message>.*)"] = true,
 		}
 
-		AppConfigVars = {
+		Config = {
 			DeleteAllTodoFilesAtStart = true,
 			DefaultTodoFileName = "todo",
 		}
@@ -262,14 +262,14 @@ unittest
 	config.doString(configString);
 
 	auto patterns = config.getTable("TodoTaskPatterns");
-	auto configVars = config.getTable("AppConfigVars");
+	auto configVars = config.getTable("Config");
 
 	foreach(string key, bool value; patterns)
 	{
 		writeln("Key => ", key, " Value => ", value);
 	}
 
-	assert(config.get!bool("AppConfigVars", "NoValue", true)); // A default value must always be passed.
+	assert(config.get!bool("Config", "NoValue", true)); // A default value must always be passed.
 
 	assert(config.get("Exist", "Won't print!") == "I exist");
 	assert(config.get("MultiLevel", "SecondLevel", "secondLevelValue", "Default value") == "Second level");
@@ -282,9 +282,9 @@ unittest
 	config.set("Exist", "No I'm not so sure.");
 	assert(config.get("Exist", "The default Value") == "No I'm not so sure.");
 
-	assert(config.get("AppConfigVars", "DeleteAllTodoFilesAtStart", false) == true);
-	config.set("AppConfigVars", "DeleteAllTodoFilesAtStart", false);
-	assert(config.get("AppConfigVars", "DeleteAllTodoFilesAtStart", false) == false);
+	assert(config.get("Config", "DeleteAllTodoFilesAtStart", false) == true);
+	config.set("Config", "DeleteAllTodoFilesAtStart", false);
+	assert(config.get("Config", "DeleteAllTodoFilesAtStart", false) == false);
 
 	foreach(string key, LuaObject value; configVars)
 	{
