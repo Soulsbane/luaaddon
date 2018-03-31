@@ -41,15 +41,15 @@ public:
 		}
 	}
 
-	string getAddonDirFor(const string generatorName = string.init)
+	string getAddonDirFor(const string addonName = string.init)
 	{
 		debug
 		{
-			return buildNormalizedPath(getInstallDir(), getAddonDirName(), generatorName);
+			return buildNormalizedPath(getInstallDir(), getAddonDirName(), addonName);
 		}
 		else
 		{
-			return configPath_.getDir(getAddonDirName(), generatorName);
+			return configPath_.getDir(getAddonDirName(), addonName);
 		}
 	}
 
@@ -82,9 +82,9 @@ public:
 		return buildNormalizedPath(params);
 	}
 
-	bool createDirInAddonDir(const string generatorName)
+	bool createDirInAddonDir(const string addonName)
 	{
-		return ensurePathExists(buildNormalizedPath(getBaseAddonDir(), generatorName));
+		return ensurePathExists(buildNormalizedPath(getBaseAddonDir(), addonName));
 	}
 
 	bool dirExists(const string dir) const
