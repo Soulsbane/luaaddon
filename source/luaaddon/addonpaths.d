@@ -92,6 +92,12 @@ public:
 		return dir.exists;
 	}
 
+	bool addonExists(const string name)
+	{
+		immutable string path = buildNormalizedPath(getBaseAddonDir(), name);
+		return path.exists;
+	}
+
 	string getAddonDir()
 	{
 		return getAddonDirFor(addonName_);
