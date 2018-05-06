@@ -249,12 +249,6 @@ unittest
 
 		Exist = "I exist"
 
-		Config = {
-			number = 10,
-			hello = "Hello World!",
-			decimal = 3.14,
-			boolean = true
-		}
 	};
 
 	LuaConfig config = new LuaConfig;
@@ -282,6 +276,7 @@ unittest
 	config.set("Exist", "No I'm not so sure.");
 	assert(config.get("Exist", "The default Value") == "No I'm not so sure.");
 
+	writeln("Config.DeleteAllTodoFilesAtStart: ", config.get("Config", "DeleteAllTodoFilesAtStart", false));
 	assert(config.get("Config", "DeleteAllTodoFilesAtStart", false) == true);
 	config.set("Config", "DeleteAllTodoFilesAtStart", false);
 	assert(config.get("Config", "DeleteAllTodoFilesAtStart", false) == false);
