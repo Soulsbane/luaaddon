@@ -214,14 +214,14 @@ private string generateNamedMethods(T)()
 
 unittest
 {
-	/*immutable string tocData = q{
-		##Author: Alan
-		##Description: A short description.
-		##Number: 100
-		file.d
-		app.d
-		app.lua
-	};
+	immutable string tocData = "
+		\n##Author: Alan
+		\n##Description: A short description.
+		\n##Number: 100
+		\nfile.d
+		\napp.d
+		\napp.lua
+	";
 
 	TocParser!() parser;
 
@@ -252,5 +252,4 @@ unittest
 	assert(parserWithMethods.getAuthor() == "Alan");
 	assert(parserWithMethods.getNumber() == 100);
 	assert(parserWithMethods.getCount(777) == 777);
-	*/
 }
