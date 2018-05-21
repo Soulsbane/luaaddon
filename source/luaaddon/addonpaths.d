@@ -12,6 +12,7 @@ import dpathutils;
 class AddonPaths
 {
 public:
+	this() {}
 
 	this(const string addonName, const string applicationName, const string organizationName = string.init)
 	{
