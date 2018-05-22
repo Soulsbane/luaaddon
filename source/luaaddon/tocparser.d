@@ -212,6 +212,7 @@ private string generateNamedMethods(T)()
 	return code;
 }
 
+///
 unittest
 {
 	immutable string tocData = "
