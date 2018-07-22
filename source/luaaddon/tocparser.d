@@ -6,11 +6,17 @@ module luaaddon.tocparser;
 import std.stdio;
 import std.file;
 import std.string;
-import std.algorithm : splitter;
+import std.algorithm;
 import std.conv : to;
 import std.array;
 
 import dstringutils.utils;
+
+struct TocField
+{
+	string key;
+	string value;
+}
 
 struct DefaultNamedMethods
 {
@@ -47,8 +53,11 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 				{
 					immutable string key = values[0].strip;
 					immutable string value = values[1].strip;
+					TocField field;
 
-					fields_[key] = value;
+					field.key = key;
+					field.value = value;
+					fields_ ~= field;
 				}
 			}
 			else if(line.empty || line.startsWith("#")) // Line is a comment or empty.
@@ -117,12 +126,37 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	*/
 	bool hasField(const string name) pure nothrow @safe
 	{
-		if(name in fields_)
+		foreach(field; fields_)
 		{
-			return true;
+			if(field.key == name)
+			{
+				return true;
+			}
 		}
 
 		return false;
+	}
+
+	/**
+		Finds the TOC Field and returns its index.
+
+		Params:
+			name = The name of the field to find.
+
+		Returns:
+			Its index or -1
+	*/
+	int hasFieldWithIndex(const string name)
+	{
+		foreach(int i, field; fields_)
+		{
+			if(field.key == name)
+			{
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	/**
@@ -137,9 +171,11 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	*/
 	T getValue(T = string)(const string name, T defaultValue = T.init) pure @safe
 	{
-		if(hasField(name))
+		int fieldIndex = hasFieldWithIndex(name);
+
+		if(fieldIndex != -1)
 		{
-			return fields_[name].to!T;
+			return fields_[fieldIndex].value.to!T;
 		}
 
 		return defaultValue;
@@ -175,7 +211,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 
 private:
 	string[] filesList_;
-	string[string] fields_;
+	TocField[] fields_;
 }
 
 /*
@@ -234,6 +270,7 @@ unittest
 	assert(parser.as!uint("Number") == 100);
 	assert(parser.getFilesList().length == 3);
 	assert(parser["Author"] == "Alan");
+	assert(parser["Programmer"] == string.init);
 
 	immutable string empty;
 	TocParser!() emptyParser;
