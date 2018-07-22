@@ -11,6 +11,7 @@ import std.conv : to;
 import std.array;
 
 import dstringutils.utils;
+import darrayutils;
 
 struct TocField
 {
@@ -160,6 +161,24 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	}
 
 	/**
+		Removes a field and its value from the TOC file.
+
+		Params:
+			name = The name of the field to remove.
+	*/
+	void removeField(const string name)
+	{
+		int fieldIndex = hasFieldWithIndex(name);
+
+		if(fieldIndex >= 0)
+		{
+			fields_[fieldIndex].destroy();
+			fields_.remove(fieldIndex);
+			//TODO: When save support is implemented we should save here.
+		}
+	}
+
+	/**
 		Gets the value for a given field.
 
 		Params:
@@ -173,7 +192,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	{
 		int fieldIndex = hasFieldWithIndex(name);
 
-		if(fieldIndex >= 0)
+		if(fieldIndex != -1)
 		{
 			return fields_[fieldIndex].value.to!T;
 		}
@@ -255,6 +274,7 @@ unittest
 		\n##Author: Alan
 		\n##Description: A short description.
 		\n##Number: 100
+		\n##RemoveIt: Remove this field.
 		\nfile.d
 		\napp.d
 		\napp.lua
@@ -271,6 +291,10 @@ unittest
 	assert(parser.getFilesList().length == 3);
 	assert(parser["Author"] == "Alan");
 	assert(parser["Programmer"] == string.init);
+
+	assert(parser.hasField("RemoveIt") == true);
+	parser.removeField("RemoveIt");
+	assert(parser.hasField("RemoveIt") == false);
 
 	immutable string empty;
 	TocParser!() emptyParser;
