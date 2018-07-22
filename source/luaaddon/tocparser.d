@@ -173,7 +173,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	{
 		int fieldIndex = hasFieldWithIndex(name);
 
-		if(fieldIndex != -1)
+		if(fieldIndex >= 0)
 		{
 			return fields_[fieldIndex].value.to!T;
 		}
