@@ -11,7 +11,6 @@ import std.conv : to;
 import std.array;
 
 import dstringutils.utils;
-import darrayutils;
 
 struct TocField
 {
@@ -172,9 +171,8 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 
 		if(fieldIndex >= 0)
 		{
-			fields_[fieldIndex].destroy();
-			fields_.remove(fieldIndex);
 			//TODO: When save support is implemented we should save here.
+			fields_ = fields_.remove!(a => a.key == name);
 		}
 	}
 
