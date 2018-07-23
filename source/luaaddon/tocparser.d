@@ -177,6 +177,21 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	}
 
 	/**
+		Inserts a field and its value into the TOC file.
+
+		Params:
+			name = The name of the field to insert.
+			value = The value of the field.
+	*/
+	void addField(const string fieldName, const string value)
+	{
+		TocField toc;
+
+		toc.key = fieldName;
+		toc.value = value;
+		fields_ ~= toc;
+	}
+	/**
 		Sets a fields value.
 
 		Params:
@@ -314,6 +329,10 @@ unittest
 	assert(parser.hasField("RemoveIt") == true);
 	parser.removeField("RemoveIt");
 	assert(parser.hasField("RemoveIt") == false);
+
+	assert(parser.hasField("InsertIt") == false);
+	parser.addField("InsertIt", "Hello");
+	assert(parser.hasField("InsertIt") == true);
 
 	immutable string empty;
 	TocParser!() emptyParser;
