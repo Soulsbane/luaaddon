@@ -167,7 +167,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	*/
 	void removeField(const string name)
 	{
-		int fieldIndex = hasFieldWithIndex(name);
+		immutable int fieldIndex = hasFieldWithIndex(name);
 
 		if(fieldIndex >= 0)
 		{
@@ -205,7 +205,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	*/
 	T getValue(T = string)(const string name, T defaultValue = T.init) pure @safe
 	{
-		int fieldIndex = hasFieldWithIndex(name);
+		immutable int fieldIndex = hasFieldWithIndex(name);
 
 		if(fieldIndex != -1)
 		{
