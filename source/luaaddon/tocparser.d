@@ -177,6 +177,23 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	}
 
 	/**
+		Sets a fields value.
+
+		Params:
+			fieldName = Name of the field to set.
+			value = The value to set the field to.
+	*/
+	void setValue(const string fieldName, const string value)
+	{
+		immutable int index = hasFieldWithIndex(fieldName);
+
+		if(index >= 0)
+		{
+			fields_[index].value = value;
+		}
+	}
+
+	/**
 		Gets the value for a given field.
 
 		Params:
@@ -289,6 +306,10 @@ unittest
 	assert(parser.getFilesList().length == 3);
 	assert(parser["Author"] == "Alan");
 	assert(parser["Programmer"] == string.init);
+
+	parser.setValue("Number", "111");
+	assert(parser.as!uint("Number") == 111);
+	assert(parser.getValue("Number") == "111");
 
 	assert(parser.hasField("RemoveIt") == true);
 	parser.removeField("RemoveIt");
