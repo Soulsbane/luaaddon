@@ -273,7 +273,14 @@ private:
 
 	string getAuthor(const string name, string defaultValue = string.init) pure @safe
 	{
-		return getValue!string(name, defaultValue);
+		immutable int fieldIndex = hasFieldWithIndex("Author");
+
+		if(fieldIndex != -1)
+		{
+			return fields_[fieldIndex].value.to!string;
+		}
+
+		return defaultValue; // There is no field Author in TOC file.
 	}
 
 	void setAuthor(const string value)
@@ -311,10 +318,18 @@ private string generateNamedMethods(T)()
 		code ~= format(q{
 			%s get%s(%s defaultValue = %s.init) pure @safe
 			{
-				return getValue!%s("%s", defaultValue);
-			}
-		}, memType, memNameCapitalized, memType, memType, memType, memNameCapitalized);
+				immutable int fieldIndex = hasFieldWithIndex("%s");
 
+				if(fieldIndex != -1)
+				{
+					return fields_[fieldIndex].value.to!%s;
+				}
+
+				return defaultValue; // There is no field Author in TOC file.
+			}
+		}, memType, memNameCapitalized, memType, memType, memNameCapitalized, memType);
+
+		//TODO: Generate a templated method also.
 		code ~= format(q{
 			void set%s(const string value)
 			{
@@ -326,6 +341,19 @@ private string generateNamedMethods(T)()
 				}
 			}
 		}, memNameCapitalized, memNameCapitalized);
+
+		//TODO: Needs testing before enabling completely.
+/*		code ~= format(q{
+			void set%s(T)(T value)
+			{
+				immutable int index = hasFieldWithIndex("%s");
+
+				if(index >= 0)
+				{
+					fields_[index].value = value.to!string;
+				}
+			}
+		}, memNameCapitalized, memNameCapitalized);*/
 	}
 
 	return code;
@@ -388,5 +416,7 @@ unittest
 	assert(parserWithMethods.getCount(777) == 777);
 	parserWithMethods.setCount("1234");
 	assert(parserWithMethods.getCount(1234) == 1234);
-	//writeln(generateNamedMethods!Methods);
+
+	//parserWithMethods.setCount(1335); // Doesn't work since the TOC file has no count field.
+	//assert(parserWithMethods.getCount(1335) == 1335);
 }
