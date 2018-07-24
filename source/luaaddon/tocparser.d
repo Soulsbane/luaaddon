@@ -329,21 +329,7 @@ private string generateNamedMethods(T)()
 			}
 		}, memType, memNameCapitalized, memType, memType, memNameCapitalized, memType);
 
-		//TODO: Generate a templated method also.
 		code ~= format(q{
-			void set%s(const string value)
-			{
-				immutable int index = hasFieldWithIndex("%s");
-
-				if(index >= 0)
-				{
-					fields_[index].value = value;
-				}
-			}
-		}, memNameCapitalized, memNameCapitalized);
-
-		//TODO: Needs testing before enabling completely.
-/*		code ~= format(q{
 			void set%s(T)(T value)
 			{
 				immutable int index = hasFieldWithIndex("%s");
@@ -353,7 +339,7 @@ private string generateNamedMethods(T)()
 					fields_[index].value = value.to!string;
 				}
 			}
-		}, memNameCapitalized, memNameCapitalized);*/
+		}, memNameCapitalized, memNameCapitalized);
 	}
 
 	return code;
@@ -417,6 +403,10 @@ unittest
 	parserWithMethods.setCount("1234");
 	assert(parserWithMethods.getCount(1234) == 1234);
 
-	//parserWithMethods.setCount(1335); // Doesn't work since the TOC file has no count field.
-	//assert(parserWithMethods.getCount(1335) == 1335);
+	parserWithMethods.setCount(1335); // Doesn't work since the TOC file has no count field.
+	assert(parserWithMethods.getCount(1335) == 1335);
+	parserWithMethods.setAuthor("Bob");
+	assert(parserWithMethods.getAuthor() == "Bob");
+
+//	writeln(generateNamedMethods!Methods);
 }
