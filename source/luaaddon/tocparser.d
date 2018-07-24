@@ -275,6 +275,28 @@ private:
 	{
 		return getValue!string(name, defaultValue);
 	}
+
+	void setAuthor(const string value)
+	{
+		immutable int index = hasFieldWithIndex("Author");
+
+		if(index >= 0)
+		{
+			fields_[index].value = value;
+		}
+	}
+
+	NOTE: The struct members names must match the toc field you are looking for.
+	Example:
+		##Author: Takayoshi Ohmura
+
+		struct Authors
+		{
+			string author; // Must be the same
+			string authors // will generate getAuthors and setAuthors reguardless of what the TOC file looks like.
+			//This is due to the methods being generated at compile time.
+		}
+
 */
 private string generateNamedMethods(T)()
 {
@@ -292,6 +314,18 @@ private string generateNamedMethods(T)()
 				return getValue!%s("%s", defaultValue);
 			}
 		}, memType, memNameCapitalized, memType, memType, memType, memNameCapitalized);
+
+		code ~= format(q{
+			void set%s(const string value)
+			{
+				immutable int index = hasFieldWithIndex("%s");
+
+				if(index >= 0)
+				{
+					fields_[index].value = value;
+				}
+			}
+		}, memNameCapitalized, memNameCapitalized);
 	}
 
 	return code;
@@ -352,4 +386,7 @@ unittest
 	assert(parserWithMethods.getAuthor() == "Alan");
 	assert(parserWithMethods.getNumber() == 100);
 	assert(parserWithMethods.getCount(777) == 777);
+	parserWithMethods.setCount("1234");
+	assert(parserWithMethods.getCount(1234) == 1234);
+	//writeln(generateNamedMethods!Methods);
 }
