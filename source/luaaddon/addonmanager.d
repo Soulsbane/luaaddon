@@ -13,10 +13,20 @@ private:
 	LuaAddon[] addons_;
 }
 
+version(unittest)
+{
+	class Generator : LuaAddon
+	{
+
+	}
+}
+
 unittest
 {
 	LuaAddon addon = new LuaAddon;
+	Generator gen = new Generator;
 	LuaAddonManager manager = new LuaAddonManager;
 
 	manager.register(addon);
+	manager.register(gen);
 }
