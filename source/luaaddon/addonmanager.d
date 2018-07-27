@@ -9,6 +9,33 @@ class LuaAddonManager
 		addons_ ~= addon;
 	}
 
+	T callFunction(T = void, S...)(const string name, S args)
+	{
+		foreach(addon; addons_)
+		{
+			if(addon.hasFunction(name))
+			{
+				static if(is(T == void))
+				{
+					addon.callFunction(name, args);
+				}
+				else
+				{
+					auto value = addon.callFunction(name, args);
+					return value[0].to!T;
+				}
+			}
+			else
+			{
+				static if(!is(T == void))
+				{
+					return T.init;
+				}
+			}
+		}
+
+	}
+
 private:
 	LuaAddon[] addons_;
 }
