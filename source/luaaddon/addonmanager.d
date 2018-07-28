@@ -33,7 +33,11 @@ class LuaAddonManager
 				}
 			}
 		}
+	}
 
+	bool hasFunction(const string name, const string addonName = string.init)
+	{
+		return true; //TODO: Once an identification system is decided upon for each LuaAddon then we will implement this.
 	}
 
 private:
