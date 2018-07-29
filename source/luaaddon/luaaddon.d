@@ -184,11 +184,18 @@ class LuaAddon : LuaAddonBase
 		return toc_.getValue!size_t("Version", 10_000);
 	}
 
+	string getAuthor(const string authorName = string.init)
+	{
+		return toc_.getAuthor(authorName);
+	}
+
 	///
 	auto opDispatch(string funcName, T...)(T args)
 	{
 		return mixin("state_." ~ funcName ~ "(args)");
 	}
+
+	alias loadTocFile = toc_.loadFile;
 
 private:
 	TocParser!() toc_;
