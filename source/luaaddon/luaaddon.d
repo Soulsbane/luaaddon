@@ -179,15 +179,11 @@ class LuaAddon : LuaAddonBase
 		Returns:
 			An integer or 10_000 by default if not found.
 	*/
-	size_t getVersion()
-	{
-		return toc_.getValue!size_t("Version", 10_000);
-	}
+	abstract size_t getVersion();
 
-	string getAuthor(const string authorName = string.init)
-	{
-		return toc_.getAuthor(authorName);
-	}
+	abstract string getAuthor(const string authorName = string.init);
+
+	abstract string getName(const string name = string.init);
 
 	///
 	auto opDispatch(string funcName, T...)(T args)

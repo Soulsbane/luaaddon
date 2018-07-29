@@ -40,24 +40,47 @@ class LuaAddonManager
 		return true; //TODO: Once an identification system is decided upon for each LuaAddon then we will implement this.
 	}
 
+	auto getAddon(const string addonName)
+	{
+		/*foreach(addon; addons_)
+		{
+			if(addon.getName() == addonName)
+			{
+				return addon;
+			}
+		}*/
+		return 0;
+	}
+
 private:
 	LuaAddon[] addons_;
 }
 
 version(unittest)
 {
-	class Generator : LuaAddon
+	class TestAddon : LuaAddon
 	{
+		override string getAuthor(const string author)
+		{
+			return "Tester";
+		}
 
+		override string getName(const string name)
+		{
+			return "TestAddon";
+		}
+
+		override size_t getVersion()
+		{
+			return 1_000;
+		}
 	}
 }
 
 unittest
 {
-	LuaAddon addon = new LuaAddon;
-	Generator gen = new Generator;
+	TestAddon gen = new TestAddon;
 	LuaAddonManager manager = new LuaAddonManager;
 
-	manager.register(addon);
 	manager.register(gen);
 }
