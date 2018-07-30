@@ -42,14 +42,15 @@ class LuaAddonManager
 
 	auto getAddon(const string addonName)
 	{
-		/*foreach(addon; addons_)
+		foreach(addon; addons_)
 		{
 			if(addon.getName() == addonName)
 			{
 				return addon;
 			}
-		}*/
-		return 0;
+		}
+
+		assert(0); //FIXME: Perhaps fire an exception?
 	}
 
 private:
@@ -83,4 +84,6 @@ unittest
 	LuaAddonManager manager = new LuaAddonManager;
 
 	manager.register(gen);
+	auto addon = manager.getAddon("TestAddon");
+	assert(addon.getAuthor() == "Tester");
 }
