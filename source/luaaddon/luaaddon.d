@@ -185,6 +185,8 @@ class LuaAddon : LuaAddonBase
 
 	abstract string getName(const string name = string.init);
 
+	abstract string getDescription();
+
 	///
 	auto opDispatch(string funcName, T...)(T args)
 	{

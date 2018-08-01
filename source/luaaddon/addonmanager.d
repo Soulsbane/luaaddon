@@ -75,6 +75,11 @@ version(unittest)
 		{
 			return 1_000;
 		}
+
+		override string getDescription()
+		{
+			return "This is a test";
+		}
 	}
 }
 
