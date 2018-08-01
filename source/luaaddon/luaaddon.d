@@ -181,9 +181,9 @@ class LuaAddon : LuaAddonBase
 	*/
 	abstract size_t getVersion();
 
-	abstract string getAuthor(const string authorName = string.init);
+	abstract string getAuthor();
 
-	abstract string getName(const string name = string.init);
+	abstract string getName();
 
 	abstract string getDescription();
 

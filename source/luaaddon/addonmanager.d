@@ -61,12 +61,12 @@ version(unittest)
 {
 	class TestAddon : LuaAddon
 	{
-		override string getAuthor(const string author)
+		override string getAuthor()
 		{
 			return "Tester";
 		}
 
-		override string getName(const string name)
+		override string getName()
 		{
 			return "TestAddon";
 		}
