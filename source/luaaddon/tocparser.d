@@ -20,6 +20,7 @@ struct TocField
 
 struct DefaultNamedMethods
 {
+	size_t Version; //NOTE: Since DLang already has a version keyword we have to use a caps version.
 	string author;
 	string description;
 	string name;
