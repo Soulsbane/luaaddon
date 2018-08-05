@@ -96,6 +96,16 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 		return false;
 	}
 
+	void save(const string fileName = string.init)
+	{
+		string name = fileName;
+
+		if(name == string.init)
+		{
+			name = fileName_;
+		}
+	}
+
 	/**
 		Loads and processes a file that contains the TOC text.
 
@@ -110,6 +120,8 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 		if(fileName.exists)
 		{
 			processText(fileName.readText);
+			fileName_ = fileName;
+
 			return true;
 		}
 
@@ -262,6 +274,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 private:
 	string[] filesList_;
 	TocField[] fields_;
+	string fileName_;
 }
 
 /*
