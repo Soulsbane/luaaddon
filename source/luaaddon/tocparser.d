@@ -96,16 +96,6 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 		return false;
 	}
 
-	void save(const string fileName = string.init)
-	{
-		string name = fileName;
-
-		if(name == string.init)
-		{
-			name = fileName_;
-		}
-	}
-
 	/**
 		Loads and processes a file that contains the TOC text.
 
@@ -126,6 +116,31 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 		}
 
 		return false;
+	}
+
+	/**
+		Saves the values to the same file that values were read from.
+	*/
+	void save()
+	{
+		save(fileName_);
+	}
+
+	/**
+		Saves the values to the given file name.
+
+		Params:
+			fileName = Name of the file to save to.
+	*/
+	void save(const string fileName)
+	{
+		if(fileName.length)
+		{
+			auto file = File(fileName, "w+");
+
+			fields_.each!(field => file.write("## ", field.key, ": ", field.value, "\n"));
+			filesList_.each!(fileName => file.writeln(fileName));
+		}
 	}
 
 	/**
@@ -423,4 +438,5 @@ unittest
 	assert(parserWithMethods.getAuthor() == "Bob");
 
 //	writeln(generateNamedMethods!Methods);
+//	parserWithMethods.save("my.toc");
 }
