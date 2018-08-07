@@ -181,10 +181,28 @@ class LuaAddon : LuaAddonBase
 	*/
 	abstract size_t getVersion();
 
+	/**
+		Gets the author of the addon.
+
+		Returns:
+			The name of the author.
+	*/
 	abstract string getAuthor();
 
+	/**
+		Gets the name of the addon.
+
+		Returns:
+			The name of the addon.
+	*/
 	abstract string getName();
 
+	/**
+		Gets the description of the addon.
+
+		Returns:
+			The description of the addon.
+	*/
 	abstract string getDescription();
 
 	///
