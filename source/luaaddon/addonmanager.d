@@ -40,6 +40,15 @@ class LuaAddonManager
 		return true; //TODO: Once an identification system is decided upon for each LuaAddon then we will implement this.
 	}
 
+	/**
+		Returns the LuaAddon object that matches the name passed to this method.
+
+		Params:
+			addonName = The name of the LuaAddon to get.
+
+		Returns:
+			The LuaAddon object that matches the name passed to this method.
+	*/
 	auto getAddon(const string addonName)
 	{
 		foreach(addon; addons_)
