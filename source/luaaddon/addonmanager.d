@@ -35,9 +35,26 @@ class LuaAddonManager
 		}
 	}
 
-	bool hasFunction(const string name, const string addonName = string.init)
+	/**
+		Determines if an addon has a function defined.
+
+		Params:
+			functionName = Name of the function to find.
+			addonName = Name of the addon to check.
+
+		Returns:
+			True if the function exists false otherwise.
+	*/
+	bool hasFunction(const string functionName, const string addonName = string.init)
 	{
-		return true; //TODO: Once an identification system is decided upon for each LuaAddon then we will implement this.
+		auto addon = getAddon(addonName);
+
+		if(addon.hasFunction(functionName))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
