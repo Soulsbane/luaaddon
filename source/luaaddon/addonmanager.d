@@ -1,5 +1,9 @@
 module luaaddon.addonmanager;
 
+import std.exception : enforce;
+import std.array : array;
+import std.algorithm : filter;
+
 import luaaddon.luaaddon;
 
 class LuaAddonManager
@@ -68,15 +72,10 @@ class LuaAddonManager
 	*/
 	auto getAddon(const string addonName)
 	{
-		foreach(addon; addons_)
-		{
-			if(addon.getName() == addonName)
-			{
-				return addon;
-			}
-		}
+		auto addons = addons_.filter!(addon => addon.getName() == addonName).array;
 
-		assert(0); //FIXME: Perhaps fire an exception?
+		enforce(addons.length == 1, "Could not load addon: " ~ addonName);
+		return addons[0];
 	}
 
 private:
