@@ -8,11 +8,25 @@ import luaaddon.luaaddon;
 
 class LuaAddonManager
 {
+	/**
+		Register an addon.
+
+		Params:
+			addon = The addon object to register.
+	*/
 	void register(LuaAddon addon)
 	{
 		addons_ ~= addon;
 	}
 
+	/**
+		Calls a Lua function and returns it's value as type T. If T = void no value will be returned(default).
+
+		Params:
+			T = The type to convert the returned value to.
+			name = The name of the function to call.
+			args = The arguments to the function to call.
+	*/
 	T callFunction(T = void, S...)(const string name, S args)
 	{
 		foreach(addon; addons_)
