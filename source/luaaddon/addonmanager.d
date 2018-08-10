@@ -5,6 +5,7 @@ import std.array : array;
 import std.algorithm : filter;
 
 import luaaddon.luaaddon;
+import luaaddon.addonexception;
 
 class LuaAddonManager
 {
@@ -88,7 +89,7 @@ class LuaAddonManager
 	{
 		auto addons = addons_.filter!(addon => addon.getName() == addonName).array;
 
-		enforce(addons.length == 1, "Could not load addon: " ~ addonName);
+		enforce!LuaAddonException(addons.length == 1, "Could not load addon: " ~ addonName);
 		return addons[0];
 	}
 
@@ -130,4 +131,5 @@ unittest
 	manager.register(gen);
 	auto addon = manager.getAddon("TestAddon");
 	assert(addon.getAuthor() == "Tester");
+	//auto explode = manager.getAddon("ExplodeAddon");
 }
