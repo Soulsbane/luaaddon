@@ -32,24 +32,29 @@ class LuaAddonManager
 	{
 		foreach(addon; addons_)
 		{
-			if(addon.hasFunction(name))
+			callFunction(addon);
+		}
+	}
+
+	T callFunction(T = void)(LuaAddon addon)
+	{
+		if(addon.hasFunction(name))
+		{
+			static if(is(T == void))
 			{
-				static if(is(T == void))
-				{
-					addon.callFunction(name, args);
-				}
-				else
-				{
-					auto value = addon.callFunction(name, args);
-					return value[0].to!T;
-				}
+				addon.callFunction(name, args);
 			}
 			else
 			{
-				static if(!is(T == void))
-				{
-					return T.init;
-				}
+				auto value = addon.callFunction(name, args);
+				return value[0].to!T;
+			}
+		}
+		else
+		{
+			static if(!is(T == void))
+			{
+				return T.init;
 			}
 		}
 	}
