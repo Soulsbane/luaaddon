@@ -28,7 +28,7 @@ class LuaAddonManager
 			name = The name of the function to call.
 			args = The arguments to the function to call.
 	*/
-	T callFunction(T = void, S...)(const string name, S args)
+	T callFunctionForAll(T = void, S...)(const string name, S args)
 	{
 		foreach(addon; addons_)
 		{
@@ -36,7 +36,7 @@ class LuaAddonManager
 		}
 	}
 
-	T callFunction(T = void)(LuaAddon addon)
+	T callFunction(T = void, S...)(LuaAddon addon, const string name, S args)
 	{
 		if(addon.hasFunction(name))
 		{
