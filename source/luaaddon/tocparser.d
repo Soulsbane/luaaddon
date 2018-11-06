@@ -9,6 +9,9 @@ import std.string;
 import std.algorithm;
 import std.conv : to;
 import std.array;
+import std.regex : matchFirst, ctRegex, regex;
+import std.algorithm;
+import std.encoding : utfBOM;
 
 import dstringutils.utils;
 
@@ -46,10 +49,15 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 		{
 			line = strip(line);
 
+			// INFO: Remove BOM here if present.
+			if(!line.empty && line.front == utfBOM)
+			{
+				line.popFront();
+			}
+
 			if(line.startsWith("##"))
 			{
 				auto values = line.chompPrefix("##").strip.splitter(":").array;
-
 				if(values.length == 2)
 				{
 					immutable string key = values[0].strip;
@@ -61,13 +69,12 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 					fields_ ~= field;
 				}
 			}
-			else if(line.empty || line.startsWith("#")) // Line is a comment or empty.
+			else if(line.empty || (line.startsWith("##") && !line.canFind(":"))) // Line is a comment or empty.
 			{
 				continue;
 			}
 			else // Line is a file name
 			{
-				//if(line.length != line.countChars(" ")) // Make sure line isn't only whitespace
 				if(!line.hasOnlySpaces()) // Make sure line isn't only whitespace
 				{
 					filesList_ ~= line;
