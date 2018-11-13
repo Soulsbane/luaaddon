@@ -470,10 +470,14 @@ unittest
 	";
 
 	TocParser!() parser;
-
 	parser.loadString(tocData);
+
 	assert(parser.empty() == false);
 	assert(parser[0].value == "Alan");
+	assert(parser.front.key == "Author");
+	assert(parser.front.value == "Alan");
+	assert(parser.back.key == "RemoveIt");
+	assert(parser.back.value == "Remove this field.");
 	assert(parser["Number"] == "100");
 	assert(parser.hasField("Author") == true);
 	assert(parser.hasField("NotAuthor") == false);
@@ -495,6 +499,8 @@ unittest
 	assert(parser.hasField("InsertIt") == false);
 	parser.addField("InsertIt", "Hello");
 	assert(parser.hasField("InsertIt") == true);
+
+	foreach(field; parser) {} // INFO: Just to ensure looping works.
 	parser.clear();
 	assert(parser.empty() == true);
 
