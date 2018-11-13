@@ -15,9 +15,14 @@ import std.encoding : utfBOM;
 
 import dstringutils.utils;
 
+/**
+	Each line in toc file(known as a field from here on) is represented with this structs key/value pair.
+*/
 struct TocField
 {
+	/// The key part of the field. In other words the part before the colon: ##Author: Himari
 	string key;
+	/// The value part of the field. In other words the part after the colon: ##Author: Himari
 	string value;
 }
 
