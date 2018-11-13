@@ -280,7 +280,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	}
 
 	/**
-		Returns a fields value.
+		Gets a fields value.
 
 		Params:
 			name = Name of the field to return.
@@ -288,9 +288,84 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 		Returns:
 			The value of the specified field.
 	*/
+	TocField opIndex(size_t index) nothrow pure @safe
+	{
+		return fields_[index];
+	}
+
+	/**
+		Gets a fields value.
+
+		Params:
+			name = Name of the field to get.
+
+		Returns:
+			The value of the specified field.
+	*/
 	string opIndex(const string name)
 	{
 		return getValue(name, string.init);
+	}
+
+	/**
+		Removes all fields from TocParser.
+	*/
+	void clear() nothrow pure @safe
+	{
+		fields_ = [];
+	}
+
+	/**
+		The number of fields TocParser has.
+	*/
+	size_t length() const nothrow pure @safe @property
+	{
+		return fields_.length;
+	}
+
+	/**
+		True of there are no fields. False otherwise.
+	*/
+	bool empty() const nothrow pure @safe @property
+	{
+		return fields_.length == 0;
+	}
+
+	/**
+		Gets the first field in TocParaser.
+	*/
+	ref TocField front() nothrow pure @safe
+	{
+		return fields_[0];
+	}
+
+	/**
+		Removes the first field in TocParser.
+	*/
+	void popFront() nothrow pure @safe
+	{
+		fields_ = fields_[1..$];
+	}
+
+	/**
+		Gets the last field in TocParser.
+	*/
+	ref TocField back() nothrow pure @safe
+	{
+		return fields_[$-1];
+	}
+
+	/**
+		Removes the last field in TocParser.
+	*/
+	void popBack() nothrow pure @safe
+	{
+		fields_ = fields_[0..$-1];
+	}
+
+	TocParser save() nothrow pure @safe
+	{
+		return this;
 	}
 
 private:
@@ -397,6 +472,9 @@ unittest
 	TocParser!() parser;
 
 	parser.loadString(tocData);
+	assert(parser.empty() == false);
+	assert(parser[0].value == "Alan");
+	assert(parser["Number"] == "100");
 	assert(parser.hasField("Author") == true);
 	assert(parser.hasField("NotAuthor") == false);
 	assert(parser.getValue("Author") == "Alan");
@@ -417,6 +495,8 @@ unittest
 	assert(parser.hasField("InsertIt") == false);
 	parser.addField("InsertIt", "Hello");
 	assert(parser.hasField("InsertIt") == true);
+	parser.clear();
+	assert(parser.empty() == true);
 
 	immutable string empty;
 	TocParser!() emptyParser;
