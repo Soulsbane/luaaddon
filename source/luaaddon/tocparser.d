@@ -220,7 +220,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 		Inserts a field and its value into the TOC file.
 
 		Params:
-			name = The name of the field to insert.
+			fieldName = The name of the field to insert.
 			value = The value of the field.
 	*/
 	void addField(const string fieldName, const string value)
@@ -285,10 +285,10 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	}
 
 	/**
-		Gets a fields value.
+		Gets a fields value from an index.
 
 		Params:
-			name = Name of the field to return.
+			index = Index of the field to return.
 
 		Returns:
 			The value of the specified field.
