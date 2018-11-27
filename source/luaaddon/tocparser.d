@@ -63,6 +63,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 			if(line.startsWith("##"))
 			{
 				auto values = line.chompPrefix("##").strip.splitter(":").array;
+
 				if(values.length == 2)
 				{
 					immutable string key = values[0].strip;
