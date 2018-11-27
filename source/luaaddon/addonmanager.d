@@ -36,6 +36,15 @@ class LuaAddonManager
 		}
 	}
 
+	/**
+		Calls a Lua function and returns it's value as type T. If T = void no value will be returned(default).
+
+		Params:
+			T = The type to convert the returned value to.
+			addon = The addon object to call.
+			name = The name of the function to call.
+			args = The arguments to the function to call.
+	*/
 	T callFunction(T = void, S...)(LuaAddon addon, const string name, S args)
 	{
 		if(addon.hasFunction(name))
