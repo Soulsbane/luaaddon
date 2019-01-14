@@ -91,6 +91,27 @@ class LuaAddonManager
 	}
 
 	/**
+		Checks if the given addon name is registered in AddonManager.
+
+		Params:
+			addonName = Name of the addon to look for.
+
+		Returns:
+			True if the addon is registered false otherwise.
+	*/
+	bool hasAddon(const string addonName)
+	{
+		size_t foundCount = addons_.filter!(addon => addon.getName() == addonName).array.length;
+
+		if(foundCount > 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 		Returns the LuaAddon object that matches the name passed to this method.
 
 		Params:
@@ -154,6 +175,10 @@ unittest
 	LuaAddonManager manager = new LuaAddonManager;
 
 	manager.register(gen);
+
+	assert(manager.hasAddon("TestAddon") == true);
+	assert(manager.hasAddon("ShouldFail") == false);
+
 	auto addon = manager.getAddon("TestAddon");
 	assert(addon.getAuthor() == "Tester");
 	assert(manager.getAddonCount() == 1);
