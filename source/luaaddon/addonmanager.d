@@ -107,6 +107,17 @@ class LuaAddonManager
 		return addons[0];
 	}
 
+	/**
+		Gets the number of registered addons.
+
+		Returns:
+			The number of registered addons.
+	*/
+	size_t getAddonCount()
+	{
+		return addons_.length;
+	}
+
 private:
 	LuaAddon[] addons_;
 }
@@ -145,5 +156,6 @@ unittest
 	manager.register(gen);
 	auto addon = manager.getAddon("TestAddon");
 	assert(addon.getAuthor() == "Tester");
+	assert(manager.getAddonCount() == 1);
 	//auto explode = manager.getAddon("ExplodeAddon");
 }
