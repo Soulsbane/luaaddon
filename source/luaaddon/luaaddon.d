@@ -210,10 +210,4 @@ class LuaAddon : LuaAddonBase
 	{
 		return mixin("state_." ~ funcName ~ "(args)");
 	}
-
-	alias loadTocFile = toc_.loadFile;
-
-private:
-	TocParser!() toc_;
-	alias toc_ this;
 }
