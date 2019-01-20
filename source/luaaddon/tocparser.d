@@ -187,9 +187,9 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 		Returns:
 			Its index or -1
 	*/
-	int hasFieldWithIndex(const string name)
+	ptrdiff_t hasFieldWithIndex(const string name)
 	{
-		foreach(int i, field; fields_)
+		foreach(i, field; fields_)
 		{
 			if(field.key == name)
 			{
@@ -208,7 +208,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	*/
 	void removeField(const string name)
 	{
-		immutable int fieldIndex = hasFieldWithIndex(name);
+		immutable ptrdiff_t fieldIndex = hasFieldWithIndex(name);
 
 		if(fieldIndex >= 0)
 		{
@@ -241,7 +241,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	*/
 	void setValue(const string fieldName, const string value)
 	{
-		immutable int index = hasFieldWithIndex(fieldName);
+		immutable ptrdiff_t index = hasFieldWithIndex(fieldName);
 
 		if(index >= 0)
 		{
@@ -261,7 +261,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 	*/
 	T getValue(T = string)(const string name, T defaultValue = T.init) pure @safe
 	{
-		immutable int fieldIndex = hasFieldWithIndex(name);
+		immutable ptrdiff_t fieldIndex = hasFieldWithIndex(name);
 
 		if(fieldIndex != -1)
 		{
@@ -435,7 +435,7 @@ private string generateNamedMethods(T)()
 		code ~= format(q{
 			%s get%s(%s defaultValue = %s.init) pure @safe
 			{
-				immutable int fieldIndex = hasFieldWithIndex("%s");
+				immutable ptrdiff_t fieldIndex = hasFieldWithIndex("%s");
 
 				if(fieldIndex != -1)
 				{
@@ -449,7 +449,7 @@ private string generateNamedMethods(T)()
 		code ~= format(q{
 			void set%s(T)(T value)
 			{
-				immutable int index = hasFieldWithIndex("%s");
+				immutable ptrdiff_t index = hasFieldWithIndex("%s");
 
 				if(index >= 0)
 				{
