@@ -38,7 +38,7 @@ public:
 		}
 		else
 		{
-			return configPath_.getDir(getAddonDirName());
+			return configPath_.getAppDir(getAddonDirName());
 		}
 	}
 
@@ -50,7 +50,7 @@ public:
 		}
 		else
 		{
-			return configPath_.getDir(getAddonDirName(), addonName);
+			return configPath_.getAppDir(getAddonDirName(), addonName);
 		}
 	}
 
@@ -62,7 +62,7 @@ public:
 		}
 		else
 		{
-			return configPath_.getDir("modules");
+			return configPath_.getAppDir("modules");
 		}
 	}
 
@@ -74,7 +74,7 @@ public:
 		}
 		else
 		{
-			return configPath_.getDir("templates");
+			return configPath_.getAppDir("templates");
 		}
 	}
 
@@ -116,12 +116,12 @@ public:
 
 	string getConfigDir()
 	{
-		return configPath_.getDir();
+		return configPath_.getAppDir();
 	}
 
 	string getConfigFilesDir()
 	{
-		return configPath_.getDir("config");
+		return configPath_.getAppDir("config");
 	}
 
 	string getAddonDirName()
