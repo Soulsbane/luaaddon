@@ -133,6 +133,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 
 	/**
 		Saves the values to the same file that values were read from.
+		Comments are not be saved. Possible FIXME.
 	*/
 	void save()
 	{
@@ -141,6 +142,7 @@ struct TocParser(NamedMethods = DefaultNamedMethods)
 
 	/**
 		Saves the values to the given file name.
+		Comments are not be saved. Possible FIXME.
 
 		Params:
 			fileName = Name of the file to save to.
