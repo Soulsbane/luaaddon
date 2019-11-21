@@ -79,8 +79,6 @@ class LuaAddonBase
 	*/
 	bool createAndLoadFile(T...)(const string name, const string data, T args)
 	{
-		immutable string defaultString = data;
-
 		debug
 		{
 			doString(data);
